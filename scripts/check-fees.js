@@ -1,129 +1,117 @@
 #!/usr/bin/env node
 /**
  * scripts/check-fees.js
- * Flags exchanges where updated_at is older than 7 days.
- * Prints name, last updated date, fee_url, and current maker/taker for each.
- * Writes a .fee-check-summary.txt for use as a GitHub Actions PR body.
+ *
+ * Verifica quais corretoras estão com dados de taxas desatualizados.
+ * Considera stale qualquer registro com updated_at > 30 dias atrás.
+ *
+ * Uso: node scripts/check-fees.js
+ *
+ * Saída:
+ *   - Console com lista de corretoras que precisam revisão
+ *   - .fee-check-summary.txt com o relatório formatado (usado pelo GitHub Actions)
+ *
+ * O script nunca falha com exit(1) — staleness não é erro crítico.
+ * O GitHub Actions lê o summary para decidir se abre um PR de alerta.
  */
 
 "use strict";
 
-const fs = require("fs");
+const fs   = require("fs");
 const path = require("path");
 
-const ROOT = path.resolve(__dirname, "..");
-const DATA_PATH = path.join(ROOT, "data", "exchanges.json");
+const ROOT         = path.resolve(__dirname, "..");
+const DATA_PATH    = path.join(ROOT, "data", "exchanges.json");
 const SUMMARY_PATH = path.join(ROOT, ".fee-check-summary.txt");
+const STALE_DAYS   = 30;
+const MS_PER_DAY   = 1000 * 60 * 60 * 24;
 
-const STALE_DAYS = 7;
-const MS_PER_DAY = 1000 * 60 * 60 * 24;
-
-// ─── Load data ─────────────────────────────────────────────────────────────────
+// ─── Carrega dados ─────────────────────────────────────────────────────────────
 let exchanges;
 try {
   exchanges = JSON.parse(fs.readFileSync(DATA_PATH, "utf8"));
 } catch (err) {
-  console.error(`✗ Failed to load data/exchanges.json: ${err.message}`);
+  console.error(`✗ Falha ao carregar data/exchanges.json: ${err.message}`);
   process.exit(1);
 }
 
 if (!Array.isArray(exchanges)) {
-  console.error("✗ data/exchanges.json must be a JSON array.");
+  console.error("✗ data/exchanges.json deve ser um array JSON.");
   process.exit(1);
 }
 
-// ─── Check staleness ───────────────────────────────────────────────────────────
-const now = Date.now();
-const staleExchanges = [];
+// ─── Verifica staleness ────────────────────────────────────────────────────────
+const now   = Date.now();
+const stale = [];
 
-for (const exchange of exchanges) {
-  if (!exchange.updated_at) {
-    staleExchanges.push({ ...exchange, daysOld: Infinity, reason: "missing updated_at" });
+for (const ex of exchanges) {
+  if (!ex.updated_at) {
+    stale.push({ ...ex, daysOld: Infinity, reason: "updated_at ausente" });
     continue;
   }
-
-  const updatedAt = new Date(exchange.updated_at);
+  const updatedAt = new Date(ex.updated_at);
   if (isNaN(updatedAt.getTime())) {
-    staleExchanges.push({ ...exchange, daysOld: Infinity, reason: "invalid updated_at" });
+    stale.push({ ...ex, daysOld: Infinity, reason: "updated_at inválido" });
     continue;
   }
-
   const daysOld = (now - updatedAt.getTime()) / MS_PER_DAY;
   if (daysOld > STALE_DAYS) {
-    staleExchanges.push({ ...exchange, daysOld: Math.round(daysOld) });
+    stale.push({ ...ex, daysOld: Math.round(daysOld) });
   }
 }
 
 // ─── Console output ────────────────────────────────────────────────────────────
-if (staleExchanges.length === 0) {
-  console.log(
-    `✓ All ${exchanges.length} exchange(s) have been updated within the last ${STALE_DAYS} days.`
-  );
+if (stale.length === 0) {
+  console.log(`✓ Todas as ${exchanges.length} corretoras foram atualizadas nos últimos ${STALE_DAYS} dias.`);
 } else {
-  console.log(
-    `⚠ ${staleExchanges.length} exchange(s) have stale fee data (older than ${STALE_DAYS} days):\n`
-  );
-  for (const ex of staleExchanges) {
-    const age =
-      ex.daysOld === Infinity
-        ? `(${ex.reason})`
-        : `${ex.daysOld} day(s) old`;
+  console.log(`⚠ ${stale.length} corretora(s) com dados desatualizados (mais de ${STALE_DAYS} dias):\n`);
+  for (const ex of stale) {
+    const age = ex.daysOld === Infinity ? `(${ex.reason})` : `${ex.daysOld} dias`;
     console.log(`  • ${ex.name}`);
-    console.log(`    Last updated : ${ex.updated_at ?? "N/A"} — ${age}`);
-    console.log(`    Maker / Taker: ${ex.fees?.maker ?? "?"} / ${ex.fees?.taker ?? "?"}`);
-    console.log(`    Fee URL      : ${ex.fees?.fee_url ?? "N/A"}`);
+    console.log(`    Última atualização : ${ex.updated_at ?? "N/A"} — ${age}`);
+    console.log(`    Maker / Taker      : ${ex.fees?.maker ?? "?"} / ${ex.fees?.taker ?? "?"}`);
+    console.log(`    Página de taxas    : ${ex.fees?.fee_url ?? "N/A"}`);
     console.log();
   }
 }
 
-// ─── Write .fee-check-summary.txt ─────────────────────────────────────────────
+// ─── Gera .fee-check-summary.txt ──────────────────────────────────────────────
 const lines = [];
-lines.push("## ⚠️ Weekly Fee Check — Manual Review Required");
+lines.push("## ⚠️ Revisão Mensal de Taxas — Ação Necessária");
 lines.push("");
-lines.push(
-  `> Generated on ${new Date().toISOString()} by \`scripts/check-fees.js\`.`
-);
+lines.push(`> Gerado em ${new Date().toISOString()} por \`scripts/check-fees.js\`.`);
 lines.push("");
 
-if (staleExchanges.length === 0) {
-  lines.push(
-    `✅ All ${exchanges.length} exchange(s) have been updated within the last ${STALE_DAYS} days. No action needed.`
-  );
+if (stale.length === 0) {
+  lines.push(`✅ Todas as ${exchanges.length} corretoras foram verificadas nos últimos ${STALE_DAYS} dias. Nenhuma ação necessária.`);
 } else {
-  lines.push(
-    `**${staleExchanges.length} exchange(s) have fee data older than ${STALE_DAYS} days.** ` +
-      `Please verify the fees at each exchange's official fee page and update \`data/exchanges.json\` accordingly.`
-  );
+  lines.push(`**${stale.length} corretora(s) precisam de revisão** (dados com mais de ${STALE_DAYS} dias).`);
   lines.push("");
-  lines.push("| Exchange | Last Updated | Days Old | Maker | Taker | Fee URL |");
+  lines.push("Siga o passo a passo em [docs/MAINTENANCE.md](docs/MAINTENANCE.md) para atualizar via ChatGPT.");
+  lines.push("");
+  lines.push("| Corretora | Última Atualização | Dias | Maker | Taker | Página de Taxas |");
   lines.push("| --- | --- | --- | --- | --- | --- |");
 
-  for (const ex of staleExchanges) {
-    const age = ex.daysOld === Infinity ? `∞ (${ex.reason})` : `${ex.daysOld}`;
+  for (const ex of stale) {
+    const age   = ex.daysOld === Infinity ? `∞ (${ex.reason})` : `${ex.daysOld}`;
     const maker = ex.fees?.maker !== undefined ? (ex.fees.maker * 100).toFixed(3) + "%" : "—";
     const taker = ex.fees?.taker !== undefined ? (ex.fees.taker * 100).toFixed(3) + "%" : "—";
-    const feeUrl = ex.fees?.fee_url ?? "—";
-    lines.push(
-      `| ${ex.name} | ${ex.updated_at ?? "N/A"} | ${age} | ${maker} | ${taker} | [link](${feeUrl}) |`
-    );
+    lines.push(`| ${ex.name} | ${ex.updated_at ?? "N/A"} | ${age} | ${maker} | ${taker} | [link](${ex.fees?.fee_url ?? "#"}) |`);
   }
 
   lines.push("");
   lines.push("### Checklist");
   lines.push("");
-  for (const ex of staleExchanges) {
-    lines.push(`- [ ] Verify and update **${ex.name}** — [Fee page](${ex.fees?.fee_url ?? "#"})`);
+  for (const ex of stale) {
+    lines.push(`- [ ] **${ex.name}** — [Abrir página de taxas](${ex.fees?.fee_url ?? "#"})`);
   }
 }
 
 lines.push("");
 lines.push("---");
-lines.push("_This PR was created automatically by the weekly fee-check workflow._");
+lines.push("_Gerado automaticamente pelo workflow mensal. Siga [docs/MAINTENANCE.md](docs/MAINTENANCE.md) para completar a revisão._");
 
-const summary = lines.join("\n");
-fs.writeFileSync(SUMMARY_PATH, summary, "utf8");
-console.log(`✓ Summary written to ${SUMMARY_PATH}`);
+fs.writeFileSync(SUMMARY_PATH, lines.join("\n"), "utf8");
+console.log(`✓ Relatório salvo em ${SUMMARY_PATH}`);
 
-// Exit 0 always — GitHub Action reads .fee-check-summary.txt to decide
-// whether to open a PR; stale fees are not a hard failure.
 process.exit(0);

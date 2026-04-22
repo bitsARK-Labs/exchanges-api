@@ -16,11 +16,7 @@
     "bcb_licensed",
     "accepts_pix",
     "fees",
-    "supported_fiats",
-    "stablecoins",
-    "kyc_required",
     "monitored_by_dolarmap",
-    "cmc_rank",
     "updated_at"
   ],
   "properties": {
@@ -81,13 +77,12 @@
     },
     "fees": {
       "type": "object",
-      "description": "Trading and withdrawal fee information.",
+      "description": "Trading fee information.",
       "additionalProperties": false,
       "required": [
         "maker",
         "taker",
         "fee_url",
-        "withdrawal_usdt",
         "note"
       ],
       "properties": {
@@ -108,11 +103,6 @@
           "description": "Direct URL to the exchange's official fee schedule page.",
           "format": "uri"
         },
-        "withdrawal_usdt": {
-          "type": "number",
-          "description": "Standard withdrawal fee for USDT via TRC-20 network, in USDT.",
-          "minimum": 0
-        },
         "note": {
           "type": "string",
           "description": "Human-readable note about fees, discounts, or special conditions.",
@@ -120,47 +110,9 @@
         }
       }
     },
-    "supported_fiats": {
-      "type": "array",
-      "description": "List of supported fiat currencies as ISO 4217 codes.",
-      "items": {
-        "type": "string",
-        "pattern": "^[A-Z]{3}$"
-      },
-      "uniqueItems": true,
-      "minItems": 1
-    },
-    "stablecoins": {
-      "type": "array",
-      "description": "List of supported stablecoin ticker symbols.",
-      "items": {
-        "type": "string",
-        "minLength": 2,
-        "maxLength": 16
-      },
-      "uniqueItems": true,
-      "minItems": 0
-    },
-    "kyc_required": {
-      "type": "boolean",
-      "description": "Whether KYC (Know Your Customer) identity verification is required to trade."
-    },
     "monitored_by_dolarmap": {
       "type": "boolean",
       "description": "Whether this exchange is actively monitored by the DolarMap service."
-    },
-    "cmc_rank": {
-      "oneOf": [
-        {
-          "type": "integer",
-          "description": "CoinMarketCap exchange rank.",
-          "minimum": 1
-        },
-        {
-          "type": "null",
-          "description": "Null when the exchange does not appear in CMC rankings."
-        }
-      ]
     },
     "updated_at": {
       "type": "string",
