@@ -2,8 +2,8 @@ name: Weekly Fee Check
 
 on:
   schedule:
-    # Every Monday at 09:00 UTC
-    - cron: "0 9 * * 1"
+    # Every Wednesday at 17:00 UTC
+    - cron: "0 17 * * 3"
   workflow_dispatch:
     inputs:
       force_pr:
