@@ -13,14 +13,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.binance.com/en/fee/schedule",
-      "withdrawal_usdt": 1.0,
       "note": "VIP tiers reduce fees. BNB discount available (25% off)."
     },
-    "supported_fiats": ["USD", "EUR", "BRL", "GBP", "AUD"],
-    "stablecoins": ["USDT", "USDC", "BUSD", "TUSD", "FDUSD"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 1,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -37,14 +32,9 @@
       "maker": 0.0008,
       "taker": 0.001,
       "fee_url": "https://www.okx.com/fees",
-      "withdrawal_usdt": 1.0,
       "note": "Tiered fee structure based on 30-day volume and OKB holdings."
     },
-    "supported_fiats": ["USD", "EUR", "GBP", "AUD"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 4,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -61,14 +51,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
-      "withdrawal_usdt": 1.0,
       "note": "Spot maker/taker both 0.1%. Futures fees differ."
     },
-    "supported_fiats": ["USD", "EUR", "GBP"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 3,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -85,14 +70,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bitget.com/en/rate/fee",
-      "withdrawal_usdt": 1.0,
       "note": "BGB token holders receive fee discounts."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 5,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -109,14 +89,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.kucoin.com/vip/privilege",
-      "withdrawal_usdt": 1.0,
       "note": "KCS holders receive up to 20% fee discount."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC", "DAI", "TUSD"],
-    "kyc_required": false,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 9,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -133,14 +108,9 @@
       "maker": 0.0,
       "taker": 0.0,
       "fee_url": "https://www.mexc.com/fee",
-      "withdrawal_usdt": 1.0,
       "note": "Spot maker/taker are currently 0%. Futures fees apply separately."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": false,
     "monitored_by_dolarmap": true,
-    "cmc_rank": 10,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -157,14 +127,9 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://foxbit.com.br/taxas",
-      "withdrawal_usdt": 2.0,
       "note": "Fees vary by trading volume. Pix deposits free; withdrawals may have small BRL fee."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -181,14 +146,9 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://www.novadax.com.br/taxas-e-limites",
-      "withdrawal_usdt": 2.0,
       "note": "ONG token holders receive fee discounts. Pix available for BRL operations."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -205,14 +165,9 @@
       "maker": 0.005,
       "taker": 0.005,
       "fee_url": "https://brasilbitcoin.com.br/taxas",
-      "withdrawal_usdt": 2.5,
       "note": "Flat 0.5% trading fee. Pix available for BRL deposits and withdrawals."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -229,14 +184,9 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://coinext.com.br/taxas",
-      "withdrawal_usdt": 2.0,
       "note": "Pix deposits and withdrawals available for BRL."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -253,14 +203,9 @@
       "maker": 0.005,
       "taker": 0.005,
       "fee_url": "https://bitso.com/fees",
-      "withdrawal_usdt": 2.0,
       "note": "Tiered maker/taker based on 30-day volume. Pix available in Brazil."
     },
-    "supported_fiats": ["BRL", "MXN", "ARS"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -277,14 +222,9 @@
       "maker": 0.003,
       "taker": 0.007,
       "fee_url": "https://www.mercadobitcoin.com.br/taxas",
-      "withdrawal_usdt": 2.0,
       "note": "Largest Brazilian exchange by volume. Pix fully supported. Volume-based tiers."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT", "USDC", "BRZ"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -301,14 +241,9 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://bitpreco.com/taxas",
-      "withdrawal_usdt": 2.0,
       "note": "Brazilian exchange focused on retail. Pix available for BRL."
     },
-    "supported_fiats": ["BRL"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": true,
-    "cmc_rank": null,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -325,14 +260,9 @@
       "maker": 0.004,
       "taker": 0.006,
       "fee_url": "https://help.coinbase.com/en/coinbase/trading-and-funding/pricing-and-fees",
-      "withdrawal_usdt": 0.0,
-      "note": "Advanced Trade fees. Simple Buy/Sell fees are higher. USDT withdrawals to external wallet may vary."
+      "note": "Advanced Trade fees. Simple Buy/Sell fees are higher."
     },
-    "supported_fiats": ["USD", "EUR", "GBP"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": true,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 2,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -349,14 +279,9 @@
       "maker": 0.0016,
       "taker": 0.0026,
       "fee_url": "https://www.kraken.com/features/fee-schedule",
-      "withdrawal_usdt": 2.5,
       "note": "Tiered maker/taker. Pro fees lower than retail."
     },
-    "supported_fiats": ["USD", "EUR", "GBP", "CAD", "AUD", "CHF"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": true,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 7,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -373,14 +298,9 @@
       "maker": 0.002,
       "taker": 0.002,
       "fee_url": "https://www.gate.io/fee",
-      "withdrawal_usdt": 1.0,
       "note": "GT token holders receive fee discounts."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC", "DAI"],
-    "kyc_required": false,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 8,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -397,14 +317,9 @@
       "maker": 0.002,
       "taker": 0.002,
       "fee_url": "https://www.htx.com/fee/",
-      "withdrawal_usdt": 1.0,
       "note": "Formerly Huobi. HT token holders receive discounts."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC", "HUSD"],
-    "kyc_required": true,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 12,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -421,14 +336,9 @@
       "maker": 0.004,
       "taker": 0.004,
       "fee_url": "https://crypto.com/exchange/fees-and-limits",
-      "withdrawal_usdt": 0.8,
       "note": "CRO staking reduces fees significantly. Exchange and App are separate platforms."
     },
-    "supported_fiats": ["USD", "EUR", "GBP", "AUD"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": true,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 6,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -445,14 +355,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://bingx.com/en-us/support/articles/fees",
-      "withdrawal_usdt": 1.0,
       "note": "Copy trading fees may differ from standard spot fees."
     },
-    "supported_fiats": ["USD", "EUR"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": false,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 11,
     "updated_at": "2026-04-01T00:00:00Z"
   },
   {
@@ -469,14 +374,9 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bitmart.com/fee/en",
-      "withdrawal_usdt": 1.5,
       "note": "BMX token holders receive fee discounts."
     },
-    "supported_fiats": ["USD"],
-    "stablecoins": ["USDT", "USDC"],
-    "kyc_required": false,
     "monitored_by_dolarmap": false,
-    "cmc_rank": 13,
     "updated_at": "2026-04-01T00:00:00Z"
   }
 ]
