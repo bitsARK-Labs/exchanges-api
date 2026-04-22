@@ -12,6 +12,7 @@
  *
  * All other methods → 405
  */
+// v1.0.1 — automated deploy via GitHub Actions
 
 const DATA_URL =
   "https://raw.githubusercontent.com/bitsARK-Labs/exchanges-api/main/data/exchanges.json";
