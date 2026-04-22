@@ -18,4 +18,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: worker
-          command: deploy --env=""
+          wranglerVersion: "4.84.1"
+          command: deploy
