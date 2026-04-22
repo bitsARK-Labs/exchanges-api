@@ -12,12 +12,14 @@ Para cada corretora, o ChatGPT deve buscar e retornar **somente estes campos**:
 
 | Campo | O que é | Exemplo |
 |---|---|---|
-| `fees.maker` | Taxa maker em decimal | `0.001` = 0,1% |
-| `fees.taker` | Taxa taker em decimal | `0.001` = 0,1% |
+| `fees.maker` | Taxa maker em decimal (tier padrão iniciante) | `0.001` = 0,1% |
+| `fees.taker` | Taxa taker em decimal (tier padrão iniciante) | `0.001` = 0,1% |
 | `fees.note` | Observação sobre descontos ou condições | `"BNB discount available (25% off)."` |
 | `fees.fee_url` | URL oficial da página de taxas | `"https://binance.com/en/fee/schedule"` |
 
 > ⚠️ **Não pedir** ao ChatGPT: withdrawal, fiats, stablecoins, KYC, ranking CMC. Esses campos foram removidos do projeto.
+
+> 🚨 **Regra de ouro das taxas:** sempre coletar o **tier padrão para iniciantes** — ou seja, a taxa que se aplica a uma conta recém-criada, sem histórico de volume, sem segurar token da plataforma e sem nenhum benefício especial. Nunca usar taxas VIP, de alto volume ou de programas de desconto que não estejam disponíveis imediatamente para qualquer pessoa que abra uma conta padrão.
 
 ---
 
@@ -36,6 +38,15 @@ Para cada corretora, acesse a URL indicada e extraia:
 - taker: taxa taker em decimal
 - note: uma frase curta em inglês sobre descontos ou condições especiais (máx 100 caracteres)
 - fee_url: a URL exata que você acessou
+
+REGRA FUNDAMENTAL — Tier padrão iniciante:
+Sempre colete a taxa do tier mais baixo da tabela, ou seja, aquele que se aplica a uma
+conta recém-criada sem histórico de volume, sem segurar token da plataforma e sem
+nenhum benefício especial. Se a página de taxas exibir uma tabela de tiers por volume
+ou por saldo, use sempre a primeira linha (tier de entrada, sem requisitos).
+Nunca retorne taxas VIP, de alto volume, com desconto de token nativo ou de programas
+de fidelidade que não estejam disponíveis imediatamente para qualquer pessoa que abra
+uma conta padrão.
 
 Retorne um array JSON com este formato exato, sem nenhum texto antes ou depois:
 [
@@ -88,8 +99,12 @@ Importante:
    - Tem exatamente 20 itens
    - Nenhum valor está `null` (se tiver, acesse a URL manualmente)
    - Os valores `maker` e `taker` são decimais (entre 0 e 0.1, tipicamente)
+   - Os valores correspondem ao **tier padrão iniciante** — se parecerem muito baixos
+     (ex: `maker: 0.0` ou `taker: 0.00005`), provavelmente o ChatGPT coletou uma taxa
+     VIP ou com desconto; acesse a URL manualmente e confirme o tier de entrada.
 
-2. **Se algum valor parecer estranho** (ex: `maker: 1.0`), acesse a URL da corretora e confirme.
+2. **Se algum valor parecer estranho** (ex: `maker: 1.0` ou valores abaixo de `0.0001`
+   sem justificativa clara), acesse a URL da corretora e confirme.
 
 ---
 
@@ -190,10 +205,13 @@ git push
 ## ❓ Dúvidas frequentes
 
 **O ChatGPT retornou um valor diferente do que está no JSON — o que faço?**  
-Se a diferença for pequena (ex: `0.001` vs `0.0010`), é o mesmo valor. Se for realmente diferente, confira a URL manualmente antes de aceitar.
+Se a diferença for pequena (ex: `0.001` vs `0.0010`), é o mesmo valor. Se for realmente diferente, confirme se o valor retornado é do **tier padrão iniciante** (sem requisitos de volume ou token) antes de aceitar.
+
+**Como saber se a taxa coletada é do tier correto?**  
+Na página de taxas da corretora, procure a tabela de tiers. A taxa correta é sempre a da **primeira linha** da tabela — aquela com volume mínimo `$0` ou sem nenhum requisito de volume, saldo ou posse de token.
 
 **Posso pedir para a IA atualizar diretamente o arquivo no GitHub?**  
-Sim! Você pode pedir para o Perplexity (ou qualquer IA com acesso ao GitHub MCP) fazer isso. Basta dizer: _"Atualize as taxas do exchanges.json com base nestes dados e abra um PR"_ e colar o JSON retornado pelo ChatGPT.
+Sim! Você pode pedir para o Perplexity (ou qualquer IA com acesso ao GitHub MCP) fazer isso. Basta dizer: _“Atualize as taxas do exchanges.json com base nestes dados e abra um PR”_ e colar o JSON retornado pelo ChatGPT.
 
 **O workflow `validate-schema` falhou no PR — o que faço?**  
 Clique em **Details** ao lado do check vermelho para ver o erro. Geralmente é um campo com tipo errado (string onde deveria ser number). Corrija no `exchanges.json` e faça um novo commit no mesmo branch — o PR atualiza automaticamente.
