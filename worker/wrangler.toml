@@ -3,44 +3,17 @@ main = "index.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# ─── Routes ────────────────────────────────────────────────────────────────────
-# Serves all requests under api.bitsark.com/v1/*
+[observability]
+enabled = true
+
 [[routes]]
 pattern = "api.bitsark.com/v1/*"
 zone_name = "bitsark.com"
 
-# ─── KV Namespace (Rate Limiting) ──────────────────────────────────────────────
-# To enable rate limiting, create a KV namespace in the Cloudflare dashboard
-# and replace the placeholder IDs below, then uncomment this block.
-#
-# Steps:
-#   1. In the Cloudflare dashboard → Workers & Pages → KV → Create namespace
-#      Name it: bitsark-rate-limit
-#   2. Copy the namespace ID and preview ID into the fields below
-#   3. Uncomment the [[kv_namespaces]] block
-#   4. Redeploy with: npm run deploy
+# To enable rate limiting, create a KV namespace in Cloudflare dashboard:
+# 1. Workers & Pages → KV → Create namespace → name: bitsark-rate-limit
+# 2. Copy the ID below and uncomment
 #
 # [[kv_namespaces]]
 # binding = "RATE_LIMIT_KV"
 # id = "YOUR_KV_NAMESPACE_ID"
-# preview_id = "YOUR_KV_PREVIEW_NAMESPACE_ID"
-
-# ─── Build ─────────────────────────────────────────────────────────────────────
-[build]
-command = ""
-
-# ─── Environment: Production ───────────────────────────────────────────────────
-[env.production]
-name = "bitsark-exchanges-api"
-
-[[env.production.routes]]
-pattern = "api.bitsark.com/v1/*"
-zone_name = "bitsark.com"
-
-# ─── Environment: Staging ──────────────────────────────────────────────────────
-[env.staging]
-name = "bitsark-exchanges-api-staging"
-
-# ─── Observability ─────────────────────────────────────────────────────────────
-[observability]
-enabled = true
