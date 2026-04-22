@@ -1,0 +1,63 @@
+name: Validate Schema
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "data/exchanges.json"
+      - "schema/**"
+  pull_request:
+    paths:
+      - "data/exchanges.json"
+      - "schema/**"
+
+jobs:
+  validate:
+    name: Validate exchanges.json against schema
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run schema validation
+        run: node scripts/validate.js
+
+      # ── Soft warning: flag entries older than 180 days (does not fail the check) ──
+      - name: Check for entries older than 180 days
+        run: |
+          node - << 'EOF'
+          const fs   = require('fs');
+          const path = require('path');
+
+          const DATA_PATH = path.join(process.cwd(), 'data', 'exchanges.json');
+          const exchanges = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+          const now       = Date.now();
+          const DAYS_180  = 180 * 24 * 60 * 60 * 1000;
+
+          const aged = exchanges.filter(e => {
+            if (!e.updated_at) return true;
+            return (now - new Date(e.updated_at).getTime()) > DAYS_180;
+          });
+
+          if (aged.length === 0) {
+            console.log('✓ No entries are older than 180 days.');
+          } else {
+            console.log(`\n⚠ WARNING: ${aged.length} entry/entries have not been verified in over 180 days:`);
+            for (const e of aged) {
+              console.log(`  • ${e.name} — last updated: ${e.updated_at ?? 'N/A'}`);
+            }
+            console.log('\nThis is a warning only and does not fail the workflow.');
+            console.log('Please consider verifying and updating these entries.');
+          }
+          EOF

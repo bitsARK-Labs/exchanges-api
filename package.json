@@ -1,0 +1,22 @@
+{
+  "name": "exchanges-api",
+  "version": "1.0.0",
+  "description": "Open data API about cryptocurrency exchanges — fees, Brazil CNPJ registration, Pix support, BCB licensing.",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev worker/index.js",
+    "deploy": "wrangler deploy",
+    "validate": "node scripts/validate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitsARK-Labs/exchanges-api.git"
+  },
+  "author": "BitsARK Labs",
+  "license": "MIT",
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "wrangler": "^3.0.0"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/bitsARK-Labs/exchanges-api/main/schema/exchange.schema.json",
+  "title": "Exchange",
+  "description": "Schema for a single cryptocurrency exchange entry in the BitsARK Exchanges API.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "slug",
+    "website",
+    "logo_url",
+    "brazil_registered",
+    "cnpj",
+    "bcb_licensed",
+    "accepts_pix",
+    "fees",
+    "supported_fiats",
+    "stablecoins",
+    "kyc_required",
+    "monitored_by_dolarmap",
+    "cmc_rank",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique slug-style identifier for the exchange.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 64
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name of the exchange.",
+      "minLength": 2,
+      "maxLength": 128
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-safe slug for the exchange (should match id).",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 64
+    },
+    "website": {
+      "type": "string",
+      "description": "Official website URL of the exchange.",
+      "format": "uri"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "URL of the exchange logo image.",
+      "format": "uri"
+    },
+    "brazil_registered": {
+      "type": "boolean",
+      "description": "Whether the exchange is registered as a legal entity in Brazil."
+    },
+    "cnpj": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Brazilian CNPJ registration number in format 00.000.000/0000-00.",
+          "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$"
+        },
+        {
+          "type": "null",
+          "description": "Null when the exchange is not registered in Brazil."
+        }
+      ]
+    },
+    "bcb_licensed": {
+      "type": "boolean",
+      "description": "Whether the exchange holds a license issued by Banco Central do Brasil (BCB)."
+    },
+    "accepts_pix": {
+      "type": "boolean",
+      "description": "Whether the exchange accepts deposits or withdrawals via Pix (Brazilian instant payment system)."
+    },
+    "fees": {
+      "type": "object",
+      "description": "Trading and withdrawal fee information.",
+      "additionalProperties": false,
+      "required": [
+        "maker",
+        "taker",
+        "fee_url",
+        "withdrawal_usdt",
+        "note"
+      ],
+      "properties": {
+        "maker": {
+          "type": "number",
+          "description": "Maker fee as a decimal (e.g., 0.001 = 0.1%).",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "taker": {
+          "type": "number",
+          "description": "Taker fee as a decimal (e.g., 0.001 = 0.1%).",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fee_url": {
+          "type": "string",
+          "description": "Direct URL to the exchange's official fee schedule page.",
+          "format": "uri"
+        },
+        "withdrawal_usdt": {
+          "type": "number",
+          "description": "Standard withdrawal fee for USDT via TRC-20 network, in USDT.",
+          "minimum": 0
+        },
+        "note": {
+          "type": "string",
+          "description": "Human-readable note about fees, discounts, or special conditions.",
+          "maxLength": 512
+        }
+      }
+    },
+    "supported_fiats": {
+      "type": "array",
+      "description": "List of supported fiat currencies as ISO 4217 codes.",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "stablecoins": {
+      "type": "array",
+      "description": "List of supported stablecoin ticker symbols.",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 16
+      },
+      "uniqueItems": true,
+      "minItems": 0
+    },
+    "kyc_required": {
+      "type": "boolean",
+      "description": "Whether KYC (Know Your Customer) identity verification is required to trade."
+    },
+    "monitored_by_dolarmap": {
+      "type": "boolean",
+      "description": "Whether this exchange is actively monitored by the DolarMap service."
+    },
+    "cmc_rank": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "description": "CoinMarketCap exchange rank.",
+          "minimum": 1
+        },
+        {
+          "type": "null",
+          "description": "Null when the exchange does not appear in CMC rankings."
+        }
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "ISO 8601 datetime when this entry was last manually verified.",
+      "format": "date-time"
+    }
+  }
+}

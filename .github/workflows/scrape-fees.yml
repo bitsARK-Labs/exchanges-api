@@ -1,0 +1,66 @@
+name: Weekly Fee Check
+
+on:
+  schedule:
+    # Every Monday at 09:00 UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      force_pr:
+        description: "Open a PR even if no changes are detected"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  check-fees:
+    name: Check for stale fee data
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run fee check
+        run: node scripts/check-fees.js
+
+      - name: Read PR body from summary file
+        id: summary
+        run: |
+          if [ -f .fee-check-summary.txt ]; then
+            BODY=$(cat .fee-check-summary.txt)
+            # Escape for GitHub Actions multiline output
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$BODY" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          else
+            echo "body=Fee check summary not found." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open PR if stale entries detected
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: weekly fee check — stale entries flagged"
+          branch: chore/weekly-fee-check
+          delete-branch: true
+          title: "⚠️ Weekly fee check — manual review required"
+          body: ${{ steps.summary.outputs.body }}
+          labels: |
+            needs-review
+            automated
+          draft: false
+          # Only create PR when there are file changes (the .fee-check-summary.txt diff)
+          # or when force_pr input is true
