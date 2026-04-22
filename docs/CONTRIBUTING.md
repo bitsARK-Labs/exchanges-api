@@ -30,7 +30,6 @@ PRs without verifiable sources will be closed without review.
 2. Open `data/exchanges.json` and locate the exchange you want to update.
 3. Make your change. Common updates:
    - `fees.maker` / `fees.taker` — use decimal notation (see [Data Quality Rules](#data-quality-rules))
-   - `fees.withdrawal_usdt` — USDT amount on TRC-20 network
    - `accepts_pix`, `bcb_licensed`, `brazil_registered` — boolean
    - `cnpj` — must match format `00.000.000/0000-00`
 4. Update `updated_at` to the current UTC datetime in ISO 8601 format:
@@ -58,7 +57,7 @@ PRs without verifiable sources will be closed without review.
    | `brazil_registered` | `true` only if the exchange has a Brazilian CNPJ — verify on [Receita Federal](https://www.gov.br/receitafederal/pt-br). |
    | `cnpj` | Required if `brazil_registered: true`. Format: `00.000.000/0000-00`. |
    | `bcb_licensed` | `true` only if the BCB license is confirmed. |
-   | `fees.maker` / `fees.taker` | Decimal (e.g., `0.001` for 0.1%). |
+   | `fees.maker` / `fees.taker` | Decimal (e.g., `0.001` for 0.1%). Must be the **standard beginner tier** — see [Data Quality Rules](#data-quality-rules). |
    | `fees.fee_url` | Direct link to the official fee schedule. |
    | `updated_at` | Set to today's date in ISO 8601. |
 
@@ -86,10 +85,24 @@ returned for corrections.
 
 ### Fees
 
+> ⚠️ **Always use the standard beginner tier fee.**
+>
+> Every exchange publishes fee tiers based on 30-day trading volume or other criteria.
+> We **always** record the fee for the **lowest tier** — i.e., the rate that applies to a
+> brand-new account with no trading history and no special benefits.
+>
+> **Never submit:**
+> - VIP, Pro, or high-volume tier fees
+> - Fees that require holding a platform token (e.g., BNB, OKB, BGB) to achieve
+> - Fees from referral programs, institutional accounts, or invite-based promotions
+> - Any rate that is not immediately available to anyone who opens a standard account
+>
+> If the exchange's fee page shows a table of tiers, always pick the **first row** (the
+> entry-level tier with no volume or balance requirements).
+
 - `maker` and `taker` **must be decimals**, not percentages.
   - ✅ Correct: `"maker": 0.001` (means 0.1%)
   - ❌ Wrong: `"maker": 0.1` or `"maker": "0.1%"`
-- `withdrawal_usdt` is the **USDT TRC-20 withdrawal fee in USDT** (not a percentage).
 - `fee_url` must be a **direct link** to the exchange's official fee schedule page.
   It must be accessible without login.
 
@@ -107,15 +120,8 @@ returned for corrections.
 
 ### Boolean fields
 
-- `bcb_licensed`, `accepts_pix`, `kyc_required`, `monitored_by_dolarmap`, `brazil_registered`
+- `bcb_licensed`, `accepts_pix`, `monitored_by_dolarmap`, `brazil_registered`
   must all be `true` or `false` (JSON booleans, not strings).
-
-### Arrays
-
-- `supported_fiats` must contain valid [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217)
-  currency codes in uppercase (e.g., `"BRL"`, `"USD"`).
-- `stablecoins` must contain uppercase ticker symbols (e.g., `"USDT"`, `"USDC"`).
-- No duplicates within either array.
 
 ---
 
@@ -126,6 +132,9 @@ The following types of contributions will be **rejected without review**:
 - **Unverified data.** If you did not personally check the exchange's official page, do not
   submit a PR. Do not copy data from aggregator sites (CoinGecko, CoinMarketCap, etc.)
   without independent verification.
+- **Non-beginner tier fees.** Fees from VIP levels, high-volume tiers, token-discount
+  programs, or any rate not available to a standard new account will be rejected.
+  Always use the standard beginner tier (see [Data Quality Rules → Fees](#fees)).
 - **PRs that only update `updated_at`** without a corresponding data change and source.
   Refreshing the date without verifying the data is misleading.
 - **Inaccessible exchanges.** Do not add exchanges that are geo-blocked, offline, or in
