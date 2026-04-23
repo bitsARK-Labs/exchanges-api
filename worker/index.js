@@ -162,18 +162,9 @@ function applyFilters(exchanges, params) {
     result = result.filter((e) => e.monitored_by_dolarmap === val);
   }
 
-  if (params.get("stablecoin") !== null) {
-    const coin = params.get("stablecoin").toUpperCase();
-    result = result.filter(
-      (e) => Array.isArray(e.stablecoins) && e.stablecoins.includes(coin)
-    );
-  }
-
-  if (params.get("fiat") !== null) {
-    const fiat = params.get("fiat").toUpperCase();
-    result = result.filter(
-      (e) => Array.isArray(e.supported_fiats) && e.supported_fiats.includes(fiat)
-    );
+  if (params.get("fiscal_status_br") !== null) {
+    const val = params.get("fiscal_status_br");
+    result = result.filter((e) => e.fiscal_status_br === val);
   }
 
   return result;
@@ -200,10 +191,9 @@ function handleIndex() {
           "bcb_licensed (boolean)",
           "accepts_pix (boolean)",
           "monitored_by_dolarmap (boolean)",
-          "stablecoin (string, e.g. USDT)",
-          "fiat (string ISO 4217, e.g. BRL)",
+          "tax_regime (string: domestic_exchange, domestic_exchange_foreign_origin, offshore_law_14754)",
         ],
-        example: "https://api.bitsark.com/v1/exchanges?accepts_pix=true&fiat=BRL",
+        example: "https://api.bitsark.com/v1/exchanges?accepts_pix=true&brazil_registered=true",
       },
       {
         method: "GET",
@@ -253,14 +243,15 @@ async function handleFees(params, env) {
 async function handleBrazilRegistered(env) {
   const data = await fetchExchanges(env);
   const filtered = data
-    .filter((e) => e.brazil_registered === true)
+    .filter((e) => e.fiscal_details_br.tax_regime.startsWith("domestic_exchange"))
     .map((e) => ({
       id: e.id,
       name: e.name,
       website: e.website,
-      cnpj: e.cnpj,
-      bcb_licensed: e.bcb_licensed,
-      accepts_pix: e.accepts_pix,
+      cnpj: e.operational_details_br.cnpj,
+      bcb_authorized: e.operational_details_br.bcb_authorized,
+      accepts_pix: e.operational_details_br.accepts_pix,
+      fiscal_details_br: e.fiscal_details_br,
       monitored_by_dolarmap: e.monitored_by_dolarmap,
       updated_at: e.updated_at,
     }));

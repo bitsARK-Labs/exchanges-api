@@ -11,12 +11,10 @@
     "slug",
     "website",
     "logo_url",
-    "brazil_registered",
-    "cnpj",
-    "bcb_licensed",
-    "accepts_pix",
     "fees",
     "monitored_by_dolarmap",
+    "operational_details_br",
+    "fiscal_details_br",
     "updated_at"
   ],
   "properties": {
@@ -50,30 +48,58 @@
       "description": "URL of the exchange logo image.",
       "format": "uri"
     },
-    "brazil_registered": {
-      "type": "boolean",
-      "description": "Whether the exchange is registered as a legal entity in Brazil."
-    },
-    "cnpj": {
-      "oneOf": [
-        {
-          "type": "string",
-          "description": "Brazilian CNPJ registration number in format 00.000.000/0000-00.",
-          "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$"
+    "operational_details_br": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cnpj", "bcb_authorized", "accepts_pix", "main_jurisdiction"],
+      "properties": {
+        "cnpj": {
+          "oneOf": [
+            { "type": "string", "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$" },
+            { "type": "null" }
+          ]
         },
-        {
-          "type": "null",
-          "description": "Null when the exchange is not registered in Brazil."
+        "bcb_authorized": { "type": "boolean" },
+        "accepts_pix": { "type": "boolean" },
+        "main_jurisdiction": {
+          "type": "string",
+          "enum": ["Brasil", "Offshore", "Internacional com Presença no Brasil"]
         }
-      ]
+      }
     },
-    "bcb_licensed": {
-      "type": "boolean",
-      "description": "Whether the exchange holds a license issued by Banco Central do Brasil (BCB)."
-    },
-    "accepts_pix": {
-      "type": "boolean",
-      "description": "Whether the exchange accepts deposits or withdrawals via Pix (Brazilian instant payment system)."
+    "fiscal_details_br": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tax_regime",
+        "monthly_brl_trade_exemption",
+        "exchange_rfb_reports",
+        "user_rfb_action_monthly"
+      ],
+      "properties": {
+        "tax_regime": {
+          "type": "string",
+          "enum": [
+            "domestic_exchange",
+            "domestic_exchange_foreign_origin",
+            "offshore_law_14754"
+          ]
+        },
+        "monthly_brl_trade_exemption": {
+          "type": "number",
+          "description": "Exemption limit in BRL for monthly sales."
+        },
+        "exchange_rfb_reports": {
+          "type": "array",
+          "items": { "enum": ["in_1888_monthly", "decripto_annually"] }
+        },
+        "user_rfb_action_monthly": {
+          "type": "array",
+          "items": {
+            "enum": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+          }
+        }
+      }
     },
     "fees": {
       "type": "object",
@@ -113,6 +139,15 @@
     "monitored_by_dolarmap": {
       "type": "boolean",
       "description": "Whether this exchange is actively monitored by the DolarMap service."
+    },
+    "fiscal_status_br": {
+      "type": "string",
+      "description": "Classification of the exchange from a Brazilian fiscal perspective (Nacional, Internacional com Presença no Brasil, Internacional).",
+      "enum": [
+        "Nacional",
+        "Internacional com Presença no Brasil",
+        "Internacional"
+      ]
     },
     "updated_at": {
       "type": "string",

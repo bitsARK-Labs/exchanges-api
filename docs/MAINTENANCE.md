@@ -17,7 +17,7 @@ Para cada corretora, o ChatGPT deve buscar e retornar **somente estes campos**:
 | `fees.note` | Observação sobre descontos ou condições | `"BNB discount available (25% off)."` |
 | `fees.fee_url` | URL oficial da página de taxas | `"https://binance.com/en/fee/schedule"` |
 
-> ⚠️ **Não pedir** ao ChatGPT: withdrawal, fiats, stablecoins, KYC, ranking CMC. Esses campos foram removidos do projeto.
+> ⚠️ **Não pedir** ao ChatGPT: tax_regime, monthly_brl_trade_exemption, exchange_rfb_reports, user_rfb_action_monthly. Estes campos são gerenciados internamente.
 
 > 🚨 **Regra de ouro das taxas:** sempre coletar o **tier padrão para iniciantes** — ou seja, a taxa que se aplica a uma conta recém-criada, sem histórico de volume, sem segurar token da plataforma e sem nenhum benefício especial. Nunca usar taxas VIP, de alto volume ou de programas de desconto que não estejam disponíveis imediatamente para qualquer pessoa que abra uma conta padrão.
 
@@ -29,7 +29,16 @@ Abra o ChatGPT (com navegação web ativada) e cole o prompt abaixo **exatamente
 
 ---
 
-```
+```markdown
+### 🚨 INSTRUÇÕES DE SEGURANÇA E FONTE (LEIA ANTES DE BUSCAR):
+1. FONTE PRIMÁRIA APENAS: Você deve buscar informações APENAS nos domínios oficiais das corretoras listadas (ex: binance.com, coinbase.com). 
+2. PROIBIÇÃO DE BLOGS/NOTÍCIAS: Ignore completamente informações de blogs, fóruns (Reddit), sites de notícias ou agregadores (CoinMarketCap, Coingecko).
+3. POLÍTICA DE "NÃO TENHO CERTEZA": Se você não encontrar a informação explicitamente na página de taxas (fee_url) ou no suporte oficial da corretora, retorne o valor atual como "KEEP_CURRENT" ou null. Não tente adivinhar ou usar dados históricos.
+4. DATA DE VERIFICAÇÃO: Se a informação no site tiver uma data (ex: "Last updated: Oct 2023"), reporte isso no campo "note".
+5. DETALHES OPERACIONAIS/FISCAIS: Os campos `operational_details_br` e `fiscal_details_br` são internos. **NUNCA** modifique estes objetos.
+
+---
+
 Você é um assistente de coleta de dados financeiros.
 Preciso que você acesse a página oficial de taxas de cada corretora abaixo e me retorne os dados no formato JSON especificado.
 
@@ -55,7 +64,7 @@ Retorne um array JSON com este formato exato, sem nenhum texto antes ou depois:
     "fees": {
       "maker": 0.001,
       "taker": 0.001,
-      "note": "BNB discount available (25% off).",
+      "note": "Standard tier. Verified on official fee schedule.",
       "fee_url": "https://www.binance.com/en/fee/schedule"
     }
   }
@@ -75,7 +84,7 @@ Corretoras para verificar:
 10. id: coinext | URL: https://coinext.com.br/taxas
 11. id: bitso | URL: https://bitso.com/fees
 12. id: mercado-bitcoin | URL: https://www.mercadobitcoin.com.br/taxas
-13. id: bitpreco | URL: https://bitpreco.com/taxas
+13. id: bitypreco | URL: https://bitypreco.com/taxas
 14. id: coinbase | URL: https://help.coinbase.com/en/coinbase/trading-and-funding/pricing-and-fees
 15. id: kraken | URL: https://www.kraken.com/features/fee-schedule
 16. id: gate-io | URL: https://www.gate.io/fee
@@ -87,7 +96,7 @@ Corretoras para verificar:
 Importante:
 - Use sempre decimal, não percentual (0.001, não 0.1 nem "0.1%")
 - Se maker e taker forem iguais, repita o valor nos dois campos
-- Se não conseguir acessar uma URL, inclua o id no JSON com os valores null e adicione uma nota "Could not access page."
+- Se a informação não estiver clara no site oficial ou for de fonte secundária, retorne null para os valores e note: "OFFICIAL_SOURCE_NOT_FOUND".
 - Retorne SOMENTE o array JSON, sem texto adicional
 ```
 
@@ -191,7 +200,7 @@ git push
 | 10 | `coinext` | Coinext | 🇧🇷 Brasil | ✅ | [link](https://coinext.com.br/taxas) |
 | 11 | `bitso` | Bitso | 🇧🇷 Brasil | ✅ | [link](https://bitso.com/fees) |
 | 12 | `mercado-bitcoin` | Mercado Bitcoin | 🇧🇷 Brasil | ✅ | [link](https://www.mercadobitcoin.com.br/taxas) |
-| 13 | `bitpreco` | BitPreço | 🇧🇷 Brasil | ✅ | [link](https://bitpreco.com/taxas) |
+| 13 | `bitypreco` | BityPreço | 🇧🇷 Brasil | ✅ | [link](https://suporte.bity.com.br/pt-BR/articles/6967815-taxas) |
 | 14 | `coinbase` | Coinbase | Global | ❌ | [link](https://help.coinbase.com/en/coinbase/trading-and-funding/pricing-and-fees) |
 | 15 | `kraken` | Kraken | Global | ❌ | [link](https://www.kraken.com/features/fee-schedule) |
 | 16 | `gate-io` | Gate.io | Global | ❌ | [link](https://www.gate.io/fee) |

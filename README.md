@@ -61,8 +61,7 @@ These filters work on `/v1/exchanges` and `/v1/exchanges/fees`:
 | `bcb_licensed` | `true` / `false` | `?bcb_licensed=true` |
 | `accepts_pix` | `true` / `false` | `?accepts_pix=true` |
 | `monitored_by_dolarmap` | `true` / `false` | `?monitored_by_dolarmap=true` |
-| `stablecoin` | ticker string | `?stablecoin=USDT` |
-| `fiat` | ISO 4217 code | `?fiat=BRL` |
+| `fiscal_status_br` | `Nacional` / `Internacional com Presença no Brasil` / `Internacional` | `?fiscal_status_br=Nacional` |
 
 Filters can be combined: `?accepts_pix=true&fiat=BRL&brazil_registered=true`
 
@@ -73,9 +72,9 @@ Filters can be combined: `?accepts_pix=true&fiat=BRL&brazil_registered=true`
 - **Source file:** [`data/exchanges.json`](./data/exchanges.json)
 - **Schema:** [`schema/exchange.schema.json`](./schema/exchange.schema.json)
 - **Exchanges included:** 20 (Binance, OKX, Bybit, Bitget, KuCoin, MEXC, Foxbit, NovaDAX,
-  Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BitPreço, Coinbase, Kraken, Gate.io,
+  Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BityPreço, Coinbase, Kraken, Gate.io,
   HTX, Crypto.com, BingX, BitMart)
-- **Brazilian exchanges:** 7 (Foxbit, NovaDAX, Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BitPreço)
+- **Brazilian exchanges:** 7 (Foxbit, NovaDAX, Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BityPreço)
 
 Every entry is validated against the JSON Schema on every pull request.
 See [`docs/API.md`](./docs/API.md) for full field documentation.

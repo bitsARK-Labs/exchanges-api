@@ -86,7 +86,10 @@ returned for corrections.
 ### Fees
 
 > ⚠️ **Always use the standard beginner tier fee.**
->
+
+**Primary Source Rule:**
+Data MUST come directly from the exchange's official domain. Screenshots or links to blogs, news articles, or third-party comparison sites are NOT valid sources and will result in PR rejection.
+
 > Every exchange publishes fee tiers based on 30-day trading volume or other criteria.
 > We **always** record the fee for the **lowest tier** — i.e., the rate that applies to a
 > brand-new account with no trading history and no special benefits.
