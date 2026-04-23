@@ -222,6 +222,41 @@ headers: { "X-Internal-Token": process.env.BITSARK_INTERNAL_TOKEN }
 
 ---
 
+## 🔗 Integração com bitsark-web
+
+Ao final do `scrape-fees.yml`, um evento `repository_dispatch` é enviado para o
+repo [`bitsark-web`](https://github.com/bitsARK-Labs/bitsark-web) com o tipo
+`exchanges-data-updated`. Isso aciona um commit vazio no `main` do `bitsark-web`,
+que por sua vez acorda o **Cloudflare Pages** para um rebuild automático do site Astro.
+Durante o build, o site faz `fetch` na API e gera as páginas estáticas atualizadas.
+
+### Fluxo completo
+
+```
+scrape-fees.yml (este repo) conclui com sucesso
+  └→ POST para github.com/repos/bitsARK-Labs/bitsark-web/dispatches
+       └→ deploy.yml do bitsark-web é acionado
+            └→ commit vazio no main do bitsark-web
+                 └→ Cloudflare Pages detecta → astro build → deploy ✓
+```
+
+### Secret necessário neste repo
+
+| Secret | Descrição |
+|---|---|
+| `BITSARK_WEB_DEPLOY_TOKEN` | Fine-grained PAT com `Actions: Read and write` no repo `bitsark-web`. Permite disparar o `repository_dispatch`. |
+
+### Se o token expirar
+
+Se o rebuild automático parar de funcionar após uma quarta-feira, verifique se o token
+expirou em **github.com → Settings → Developer settings → Fine-grained tokens**.
+Para recriar, siga as instruções em `bitsark-web/docs/WORKFLOWS.md`.
+
+> O deploy manual do `bitsark-web` continua funcionando normalmente mesmo se o token
+> expirar — apenas o trigger automático pára.
+
+---
+
 ## 🗂️ Lista de todas as corretoras no dataset
 
 | # | ID | Nome | Regime Fiscal BR | Pix | Página de Taxas |
