@@ -17,7 +17,7 @@ Para cada corretora, o ChatGPT deve buscar e retornar **somente estes campos**:
 | `fees.note` | Observação sobre descontos ou condições | `"BNB discount available (25% off)."` |
 | `fees.fee_url` | URL oficial da página de taxas | `"https://binance.com/en/fee/schedule"` |
 
-> ⚠️ **Não pedir** ao ChatGPT: tax_regime, monthly_brl_trade_exemption, exchange_rfb_reports, user_rfb_action_monthly. Estes campos são gerenciados internamente.
+> ⚠️ **Não pedir** ao ChatGPT: `operational_details_br`, `fiscal_details_br`, `monitored_by_dolarmap`. Estes campos são gerenciados internamente e nunca devem ser alterados via manutenção mensal.
 
 > 🚨 **Regra de ouro das taxas:** sempre coletar o **tier padrão para iniciantes** — ou seja, a taxa que se aplica a uma conta recém-criada, sem histórico de volume, sem segurar token da plataforma e sem nenhum benefício especial. Nunca usar taxas VIP, de alto volume ou de programas de desconto que não estejam disponíveis imediatamente para qualquer pessoa que abra uma conta padrão.
 
@@ -37,7 +37,7 @@ Abra o ChatGPT (com navegação web ativada) e cole o prompt abaixo **exatamente
 4. DATA DE VERIFICAÇÃO: Se a informação no site tiver uma data (ex: "Last updated: Oct 2023"), reporte isso no campo "note".
 5. DETALHES OPERACIONAIS/FISCAIS: Os campos `operational_details_br` e `fiscal_details_br` são internos. **NUNCA** modifique estes objetos.
 
----
+***
 
 Você é um assistente de coleta de dados financeiros.
 Preciso que você acesse a página oficial de taxas de cada corretora abaixo e me retorne os dados no formato JSON especificado.
@@ -72,31 +72,36 @@ Retorne um array JSON com este formato exato, sem nenhum texto antes ou depois:
 
 Corretoras para verificar:
 
-1. id: binance | URL: https://www.binance.com/en/fee/schedule
-2. id: okx | URL: https://www.okx.com/fees
-3. id: bybit | URL: https://www.bybit.com/en/help-center/article/Trading-Fee-Structure
-4. id: bitget | URL: https://www.bitget.com/en/rate/fee
-5. id: kucoin | URL: https://www.kucoin.com/vip/privilege
-6. id: mexc | URL: https://www.mexc.com/fee
-7. id: foxbit | URL: https://foxbit.com.br/taxas
-8. id: novadax | URL: https://www.novadax.com.br/taxas-e-limites
-9. id: brasil-bitcoin | URL: https://brasilbitcoin.com.br/taxas
-10. id: coinext | URL: https://coinext.com.br/taxas
-11. id: bitso | URL: https://bitso.com/fees
-12. id: mercado-bitcoin | URL: https://www.mercadobitcoin.com.br/taxas
-13. id: bitypreco | URL: https://bitypreco.com/taxas
-14. id: coinbase | URL: https://help.coinbase.com/en/coinbase/trading-and-funding/pricing-and-fees
-15. id: kraken | URL: https://www.kraken.com/features/fee-schedule
-16. id: gate-io | URL: https://www.gate.io/fee
-17. id: htx | URL: https://www.htx.com/fee/
-18. id: crypto-com | URL: https://crypto.com/exchange/fees-and-limits
-19. id: bingx | URL: https://bingx.com/en-us/support/articles/fees
-20. id: bitmart | URL: https://www.bitmart.com/fee/en
+1.  id: binance         | URL: https://www.binance.com/pt-BR/fee/schedule
+2.  id: okx             | URL: https://www.okx.com/fees
+3.  id: bybit           | URL: https://www.bybit.com/en/help-center/article/Trading-Fee-Structure
+4.  id: bitget          | URL: https://www.bitget.com/en/rate/fee
+5.  id: kucoin          | URL: https://www.kucoin.com/announcement/en-fee
+6.  id: mexc            | URL: https://www.mexc.com/fee
+7.  id: foxbit          | URL: https://foxbit.com.br/taxas/
+8.  id: novadax         | URL: https://www.novadax.com.br/taxas-e-limites
+9.  id: brasil-bitcoin  | URL: https://brasilbitcoin.com.br/taxas
+10. id: coinext         | URL: https://coinext.com.br/taxas-limites-prazos
+11. id: bitso           | URL: https://bitso.com/fees
+12. id: mercado-bitcoin | URL: https://www.mercadobitcoin.com.br/taxas-contas-limites
+13. id: bitypreco       | URL: https://suporte.bity.com.br/pt-BR/articles/6967815-taxas
+14. id: coinbase        | URL: https://help.coinbase.com/en/exchange/trading-and-funding/exchange-fees
+15. id: kraken          | URL: https://www.kraken.com/features/fee-schedule
+16. id: gate-io         | URL: https://www.gate.com/fee
+17. id: htx             | URL: https://www.htx.com/fee/
+18. id: crypto-com      | URL: https://crypto.com/exchange/document/fees-limits
+19. id: bingx           | URL: https://www.bingx.com/en-us/support/articles/360027240173
+20. id: bitmart         | URL: https://www.bitmart.com/fee/en
+21. id: nubank-cripto   | URL: https://nubank.com.br/nu/nubank-criptomoeda
+22. id: mercado-pago    | URL: https://www.mercadopago.com.br/cripto
+23. id: mynt            | URL: https://www.mynt.com.br
+24. id: bipa            | URL: https://suporte.bipa.app/hc/pt-br/articles/30249970786587-Quais-sao-as-taxas-de-negociacao-de-Bitcoin-e-USDT-na-Bipa
 
 Importante:
 - Use sempre decimal, não percentual (0.001, não 0.1 nem "0.1%")
 - Se maker e taker forem iguais, repita o valor nos dois campos
-- Se a informação não estiver clara no site oficial ou for de fonte secundária, retorne null para os valores e note: "OFFICIAL_SOURCE_NOT_FOUND".
+- Para corretoras que não têm maker/taker explícito (ex: spread embutido), use null para maker/taker e descreva no note
+- Se a informação não estiver clara no site oficial ou for de fonte secundária, retorne null para os valores e note: "OFFICIAL_SOURCE_NOT_FOUND"
 - Retorne SOMENTE o array JSON, sem texto adicional
 ```
 
@@ -105,8 +110,8 @@ Importante:
 ## ✅ Passo 2 — Validar o retorno do ChatGPT
 
 1. O ChatGPT vai retornar um array JSON. **Verifique se:**
-   - Tem exatamente 20 itens
-   - Nenhum valor está `null` (se tiver, acesse a URL manualmente)
+   - Tem exatamente **24 itens**
+   - Nenhum valor está `null` sem justificativa (se tiver, acesse a URL manualmente)
    - Os valores `maker` e `taker` são decimais (entre 0 e 0.1, tipicamente)
    - Os valores correspondem ao **tier padrão iniciante** — se parecerem muito baixos
      (ex: `maker: 0.0` ou `taker: 0.00005`), provavelmente o ChatGPT coletou uma taxa
@@ -121,11 +126,9 @@ Importante:
 
 1. Abra o arquivo `data/exchanges.json` no VS Code
 2. Para cada corretora que teve mudança, atualize os campos `fees.maker`, `fees.taker`, `fees.note` e `fees.fee_url`
-3. **Sempre atualize também o campo `updated_at`** com a data de hoje no formato ISO:
-   ```
-   "updated_at": "2026-05-01T00:00:00Z"
-   ```
-4. Salve o arquivo
+3. **Nunca altere** `operational_details_br`, `fiscal_details_br` ou `monitored_by_dolarmap` durante a manutenção mensal
+4. **Sempre atualize também o campo `updated_at`** com a data de hoje no formato ISO: "updated_at": "2026-05-01T00:00:00Z"
+5. Salve o arquivo
 
 ---
 
@@ -149,11 +152,8 @@ Se aparecer erro — o ChatGPT provavelmente retornou um formato inválido. Leia
 1. Abra o painel **Source Control** (ícone de ramificação na barra lateral esquerda, ou `Ctrl+Shift+G`)
 2. Você verá o arquivo `data/exchanges.json` listado em **Changes**
 3. Clique no **+** ao lado do arquivo para adicionar ao commit (stage)
-4. No campo **Message**, escreva:
-   ```
-   chore: atualiza taxas das corretoras - revisão mensal YYYY-MM
-   ```
-   Substitua `YYYY-MM` pelo ano e mês atual (ex: `2026-05`)
+4. No campo **Message**, escreva:chore: atualiza taxas das corretoras - revisão mensal YYYY-MM
+Substitua `YYYY-MM` pelo ano e mês atual (ex: `2026-05`)
 5. Clique em **Commit** (✓)
 6. Clique em **Publish Branch** ou **Push** para enviar ao GitHub
 
@@ -184,30 +184,72 @@ git push
 
 ---
 
-## 🗂️ Lista de todas as corretoras monitoradas
+## 🔑 Gerenciando o `DOLARMAP_SECRET` (token interno)
 
-| # | ID | Nome | País | Pix | Página de Taxas |
+O endpoint `GET /v1/exchanges/dolarmap` é protegido por um secret armazenado como variável de ambiente no Cloudflare Worker.
+
+### Gerar um novo token
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### Atualizar o secret no Cloudflare
+
+```bash
+cd worker/
+wrangler secret put DOLARMAP_SECRET
+# Cole o valor gerado quando solicitado e pressione Enter
+```
+
+### Quando trocar o token
+
+- Se o token for comprometido (vazou em log, commit, etc.)
+- Ao rotacionar credenciais periodicamente (recomendado a cada 6 meses)
+- Após trocar, atualize também a variável de ambiente correspondente no app DolarMap
+
+### Uso no app DolarMap
+
+```js
+// .env do projeto DolarMap
+BITSARK_INTERNAL_TOKEN=seu_token_aqui
+
+// Chamada na aplicação
+fetch("https://api.bitsark.com/v1/exchanges/dolarmap", {
+headers: { "X-Internal-Token": process.env.BITSARK_INTERNAL_TOKEN }
+})
+```
+
+---
+
+## 🗂️ Lista de todas as corretoras no dataset
+
+| # | ID | Nome | Regime Fiscal BR | Pix | Página de Taxas |
 |---|---|---|---|---|---|
-| 1 | `binance` | Binance | Global | ❌ | [link](https://www.binance.com/en/fee/schedule) |
-| 2 | `okx` | OKX | Global | ❌ | [link](https://www.okx.com/fees) |
-| 3 | `bybit` | Bybit | Global | ❌ | [link](https://www.bybit.com/en/help-center/article/Trading-Fee-Structure) |
-| 4 | `bitget` | Bitget | Global | ❌ | [link](https://www.bitget.com/en/rate/fee) |
-| 5 | `kucoin` | KuCoin | Global | ❌ | [link](https://www.kucoin.com/vip/privilege) |
-| 6 | `mexc` | MEXC | Global | ❌ | [link](https://www.mexc.com/fee) |
-| 7 | `foxbit` | Foxbit | 🇧🇷 Brasil | ✅ | [link](https://foxbit.com.br/taxas) |
-| 8 | `novadax` | NovaDAX | 🇧🇷 Brasil | ✅ | [link](https://www.novadax.com.br/taxas-e-limites) |
-| 9 | `brasil-bitcoin` | Brasil Bitcoin | 🇧🇷 Brasil | ✅ | [link](https://brasilbitcoin.com.br/taxas) |
-| 10 | `coinext` | Coinext | 🇧🇷 Brasil | ✅ | [link](https://coinext.com.br/taxas) |
-| 11 | `bitso` | Bitso | 🇧🇷 Brasil | ✅ | [link](https://bitso.com/fees) |
-| 12 | `mercado-bitcoin` | Mercado Bitcoin | 🇧🇷 Brasil | ✅ | [link](https://www.mercadobitcoin.com.br/taxas) |
-| 13 | `bitypreco` | BityPreço | 🇧🇷 Brasil | ✅ | [link](https://suporte.bity.com.br/pt-BR/articles/6967815-taxas) |
-| 14 | `coinbase` | Coinbase | Global | ❌ | [link](https://help.coinbase.com/en/coinbase/trading-and-funding/pricing-and-fees) |
-| 15 | `kraken` | Kraken | Global | ❌ | [link](https://www.kraken.com/features/fee-schedule) |
-| 16 | `gate-io` | Gate.io | Global | ❌ | [link](https://www.gate.io/fee) |
-| 17 | `htx` | HTX | Global | ❌ | [link](https://www.htx.com/fee/) |
-| 18 | `crypto-com` | Crypto.com | Global | ❌ | [link](https://crypto.com/exchange/fees-and-limits) |
-| 19 | `bingx` | BingX | Global | ❌ | [link](https://bingx.com/en-us/support/articles/fees) |
-| 20 | `bitmart` | BitMart | Global | ❌ | [link](https://www.bitmart.com/fee/en) |
+| 1 | `binance` | Binance | offshore_law_14754 | ✅ | [link](https://www.binance.com/pt-BR/fee/schedule) |
+| 2 | `okx` | OKX Brasil | domestic_exchange_foreign_origin | ✅ | [link](https://www.okx.com/fees) |
+| 3 | `bybit` | Bybit | domestic_exchange_foreign_origin | ✅ | [link](https://www.bybit.com/en/help-center/article/Trading-Fee-Structure) |
+| 4 | `bitget` | Bitget | offshore_law_14754 | ❌ | [link](https://www.bitget.com/en/rate/fee) |
+| 5 | `kucoin` | KuCoin | offshore_law_14754 | ✅ | [link](https://www.kucoin.com/announcement/en-fee) |
+| 6 | `mexc` | MEXC | offshore_law_14754 | ❌ | [link](https://www.mexc.com/fee) |
+| 7 | `foxbit` | Foxbit | domestic_exchange | ✅ | [link](https://foxbit.com.br/taxas/) |
+| 8 | `novadax` | NovaDAX | domestic_exchange | ✅ | [link](https://www.novadax.com.br/taxas-e-limites) |
+| 9 | `brasil-bitcoin` | Brasil Bitcoin | domestic_exchange | ✅ | [link](https://brasilbitcoin.com.br/taxas) |
+| 10 | `coinext` | Coinext | domestic_exchange | ✅ | [link](https://coinext.com.br/taxas-limites-prazos) |
+| 11 | `bitso` | Bitso | domestic_exchange_foreign_origin | ✅ | [link](https://bitso.com/fees) |
+| 12 | `mercado-bitcoin` | Mercado Bitcoin | domestic_exchange | ✅ | [link](https://www.mercadobitcoin.com.br/taxas-contas-limites) |
+| 13 | `bitypreco` | BityPreço | domestic_exchange | ✅ | [link](https://suporte.bity.com.br/pt-BR/articles/6967815-taxas) |
+| 14 | `coinbase` | Coinbase | domestic_exchange_foreign_origin | ✅ | [link](https://help.coinbase.com/en/exchange/trading-and-funding/exchange-fees) |
+| 15 | `kraken` | Kraken | domestic_exchange_foreign_origin | ✅ | [link](https://www.kraken.com/features/fee-schedule) |
+| 16 | `gate-io` | Gate.io | offshore_law_14754 | ❌ | [link](https://www.gate.com/fee) |
+| 17 | `htx` | HTX | offshore_law_14754 | ❌ | [link](https://www.htx.com/fee/) |
+| 18 | `crypto-com` | Crypto.com | domestic_exchange_foreign_origin | ✅ | [link](https://crypto.com/exchange/document/fees-limits) |
+| 19 | `bingx` | BingX | offshore_law_14754 | ❌ | [link](https://www.bingx.com/en-us/support/articles/360027240173) |
+| 20 | `bitmart` | BitMart | offshore_law_14754 | ❌ | [link](https://www.bitmart.com/fee/en) |
+| 21 | `nubank-cripto` | Nubank Cripto | domestic_exchange | ✅ | [link](https://nubank.com.br/nu/nubank-criptomoeda) |
+| 22 | `mercado-pago` | Mercado Pago | domestic_exchange | ✅ | [link](https://www.mercadopago.com.br/cripto) |
+| 23 | `mynt` | Mynt (BTG Pactual) | domestic_exchange | ✅ | [link](https://www.mynt.com.br) |
+| 24 | `bipa` | Bipa | domestic_exchange | ✅ | [link](https://suporte.bipa.app/hc/pt-br/articles/30249970786587-Quais-sao-as-taxas-de-negociacao-de-Bitcoin-e-USDT-na-Bipa) |
 
 ---
 
@@ -220,10 +262,13 @@ Se a diferença for pequena (ex: `0.001` vs `0.0010`), é o mesmo valor. Se for 
 Na página de taxas da corretora, procure a tabela de tiers. A taxa correta é sempre a da **primeira linha** da tabela — aquela com volume mínimo `$0` ou sem nenhum requisito de volume, saldo ou posse de token.
 
 **Posso pedir para a IA atualizar diretamente o arquivo no GitHub?**  
-Sim! Você pode pedir para o Perplexity (ou qualquer IA com acesso ao GitHub MCP) fazer isso. Basta dizer: _“Atualize as taxas do exchanges.json com base nestes dados e abra um PR”_ e colar o JSON retornado pelo ChatGPT.
+Sim! Você pode pedir para o Perplexity (ou qualquer IA com acesso ao GitHub MCP) fazer isso. Basta dizer: _"Atualize as taxas do exchanges.json com base nestes dados e abra um PR"_ e colar o JSON retornado pelo ChatGPT.
 
 **O workflow `validate-schema` falhou no PR — o que faço?**  
 Clique em **Details** ao lado do check vermelho para ver o erro. Geralmente é um campo com tipo errado (string onde deveria ser number). Corrija no `exchanges.json` e faça um novo commit no mesmo branch — o PR atualiza automaticamente.
 
-**Preciso atualizar todas as 20 corretoras todo mês?**  
+**Preciso atualizar todas as 24 corretoras todo mês?**  
 Não. Só atualize as que tiveram mudança de taxa. Mas **sempre atualize o `updated_at`** de todas as que você verificou, mesmo que os valores não tenham mudado — isso reseta o contador de staleness.
+
+**Como faço para rotacionar o `DOLARMAP_SECRET`?**  
+Gere um novo token com `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`, rode `wrangler secret put DOLARMAP_SECRET` e atualize a variável de ambiente no app DolarMap. O token antigo deixa de funcionar imediatamente após o redeploy do worker.

@@ -30,8 +30,9 @@ PRs without verifiable sources will be closed without review.
 2. Open `data/exchanges.json` and locate the exchange you want to update.
 3. Make your change. Common updates:
    - `fees.maker` / `fees.taker` — use decimal notation (see [Data Quality Rules](#data-quality-rules))
-   - `accepts_pix`, `bcb_licensed`, `brazil_registered` — boolean
-   - `cnpj` — must match format `00.000.000/0000-00`
+   - `operational_details_br.accepts_pix` — boolean
+   - `operational_details_br.bcb_authorized` — boolean
+   - `operational_details_br.cnpj` — must match format `00.000.000/0000-00`
 4. Update `updated_at` to the current UTC datetime in ISO 8601 format:
    `"updated_at": "2026-04-15T00:00:00Z"`
 5. Run validation: `npm run validate`
@@ -54,9 +55,14 @@ PRs without verifiable sources will be closed without review.
    | `slug` | Should match `id`. |
    | `website` | Full URI including `https://`. |
    | `logo_url` | Full URI. Use `https://assets.bitsark.com/logos/<id>.svg` as a placeholder if you don't have a hosted URL. |
-   | `brazil_registered` | `true` only if the exchange has a Brazilian CNPJ — verify on [Receita Federal](https://www.gov.br/receitafederal/pt-br). |
-   | `cnpj` | Required if `brazil_registered: true`. Format: `00.000.000/0000-00`. |
-   | `bcb_licensed` | `true` only if the BCB license is confirmed. |
+   | `operational_details_br.cnpj` | Required if the exchange has a Brazilian CNPJ. Format: `00.000.000/0000-00`. Otherwise `null`. Verify on [Receita Federal](https://www.gov.br/receitafederal/pt-br). |
+   | `operational_details_br.bcb_authorized` | `true` only if the BCB authorization is confirmed. |
+   | `operational_details_br.accepts_pix` | `true` if the exchange supports Pix deposits/withdrawals in Brazil. |
+   | `operational_details_br.main_jurisdiction_iso` | ISO 3166-1 alpha-2 code of the exchange's primary legal jurisdiction (e.g. `BR`, `KY`, `SC`). |
+   | `fiscal_details_br.tax_regime` | One of: `domestic_exchange`, `domestic_exchange_foreign_origin`, `offshore_law_14754`. |
+   | `fiscal_details_br.monthly_brl_trade_exemption` | Monthly BRL volume below which the exchange is exempt from IN 1888 reporting. Use `0` for offshore. |
+   | `fiscal_details_br.exchange_rfb_reports` | Array of report codes filed by the exchange with Receita Federal. Use `[]` if none. |
+   | `fiscal_details_br.user_rfb_action_monthly` | Array of monthly actions the user must take with Receita Federal. Use `[]` if none. |
    | `fees.maker` / `fees.taker` | Decimal (e.g., `0.001` for 0.1%). Must be the **standard beginner tier** — see [Data Quality Rules](#data-quality-rules). |
    | `fees.fee_url` | Direct link to the official fee schedule. |
    | `updated_at` | Set to today's date in ISO 8601. |
@@ -113,7 +119,7 @@ Data MUST come directly from the exchange's official domain. Screenshots or link
 
 - Format must be exactly `00.000.000/0000-00` (dots, slash, and hyphen required).
 - Must be verified against the [Receita Federal CNPJ query tool](https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp).
-- `brazil_registered` must be `true` if and only if a valid CNPJ is present.
+- `operational_details_br.cnpj` must be `null` if the exchange has no Brazilian legal entity.
 
 ### `updated_at`
 
@@ -123,7 +129,7 @@ Data MUST come directly from the exchange's official domain. Screenshots or link
 
 ### Boolean fields
 
-- `bcb_licensed`, `accepts_pix`, `monitored_by_dolarmap`, `brazil_registered`
+- `operational_details_br.bcb_authorized`, `operational_details_br.accepts_pix`
   must all be `true` or `false` (JSON booleans, not strings).
 
 ---
@@ -146,7 +152,8 @@ The following types of contributions will be **rejected without review**:
   accessible page on the exchange's official domain.
 - **Promotional or sponsored entries.** This is a neutral, open data repository.
   We do not accept paid placements or affiliated links.
-- **Changes to `monitored_by_dolarmap`.** This field is managed by the BitsARK team only.
+- **Changes to `monitored_by_dolarmap` or `fiscal_details_br`.** These fields are managed
+  by the BitsARK team only and will not be accepted via community PRs.
 
 ---
 

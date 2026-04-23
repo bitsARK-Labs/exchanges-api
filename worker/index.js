@@ -3,12 +3,13 @@
  * Route: api.bitsark.com/v1/*
  *
  * Endpoints:
- *   GET  /v1/                          — API index
- *   GET  /v1/exchanges                 — All exchanges (filterable)
- *   GET  /v1/exchanges/fees            — Fee projection (filterable)
- *   GET  /v1/exchanges/brazil-registered — Brazil-registered exchanges
- *   GET  /v1/exchanges/:id             — Single exchange by id or slug
- *   OPTIONS *                          — CORS preflight
+ *   GET  /v1/                              — API index
+ *   GET  /v1/exchanges                     — All exchanges (filterable)
+ *   GET  /v1/exchanges/fees                — Fee projection (filterable)
+ *   GET  /v1/exchanges/brazil-registered   — Brazil-registered exchanges
+ *   GET  /v1/exchanges/dolarmap            — DolarMap-monitored exchanges [internal, requires X-Internal-Token]
+ *   GET  /v1/exchanges/:id                 — Single exchange by id or slug
+ *   OPTIONS *                              — CORS preflight
  *
  * All other methods → 405
  */
@@ -26,7 +27,7 @@ const DISCLAIMER =
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, X-Internal-Token",
   "Access-Control-Max-Age": "86400",
 };
 
@@ -34,7 +35,7 @@ const CORS_HEADERS = {
 // Rate limiting via Cloudflare KV (optional — skipped when KV is not bound)
 // ---------------------------------------------------------------------------
 const RATE_LIMIT_WINDOW = 60; // seconds
-const RATE_LIMIT_MAX = 60; // requests per window
+const RATE_LIMIT_MAX = 60;    // requests per window
 
 async function checkRateLimit(ip, env) {
   if (!env.RATE_LIMIT_KV) return { allowed: true };
@@ -66,7 +67,10 @@ async function checkRateLimit(ip, env) {
   try {
     await env.RATE_LIMIT_KV.put(
       key,
-      JSON.stringify({ ts: record && record.ts > windowStart ? record.ts : now, count: count + 1 }),
+      JSON.stringify({
+        ts: record && record.ts > windowStart ? record.ts : now,
+        count: count + 1,
+      }),
       { expirationTtl: RATE_LIMIT_WINDOW * 2 }
     );
   } catch (_) {
@@ -137,7 +141,15 @@ function errorResponse(message, status = 400) {
 }
 
 // ---------------------------------------------------------------------------
-// Filtering helpers
+// Field projection — strips internal fields from public responses
+// ---------------------------------------------------------------------------
+function toPublic(exchange) {
+  const { monitored_by_dolarmap, ...publicFields } = exchange;
+  return publicFields;
+}
+
+// ---------------------------------------------------------------------------
+// Filtering helpers (public filters only — no monitored_by_dolarmap)
 // ---------------------------------------------------------------------------
 function applyFilters(exchanges, params) {
   let result = [...exchanges];
@@ -157,14 +169,14 @@ function applyFilters(exchanges, params) {
     result = result.filter((e) => e.accepts_pix === val);
   }
 
-  if (params.get("monitored_by_dolarmap") !== null) {
-    const val = params.get("monitored_by_dolarmap").toLowerCase() === "true";
-    result = result.filter((e) => e.monitored_by_dolarmap === val);
-  }
-
   if (params.get("fiscal_status_br") !== null) {
     const val = params.get("fiscal_status_br");
     result = result.filter((e) => e.fiscal_status_br === val);
+  }
+
+  if (params.get("tax_regime") !== null) {
+    const val = params.get("tax_regime");
+    result = result.filter((e) => e.fiscal_details_br?.tax_regime === val);
   }
 
   return result;
@@ -190,7 +202,6 @@ function handleIndex() {
           "brazil_registered (boolean)",
           "bcb_licensed (boolean)",
           "accepts_pix (boolean)",
-          "monitored_by_dolarmap (boolean)",
           "tax_regime (string: domestic_exchange, domestic_exchange_foreign_origin, offshore_law_14754)",
         ],
         example: "https://api.bitsark.com/v1/exchanges?accepts_pix=true&brazil_registered=true",
@@ -198,15 +209,23 @@ function handleIndex() {
       {
         method: "GET",
         path: "/v1/exchanges/fees",
-        description: "Fee projection: id, name, website, brazil_registered, fees, updated_at. Supports same filters as /exchanges.",
+        description:
+          "Fee projection: id, name, website, brazil_registered, fees, updated_at. Supports same filters as /exchanges.",
         example: "https://api.bitsark.com/v1/exchanges/fees?brazil_registered=true",
       },
       {
         method: "GET",
         path: "/v1/exchanges/brazil-registered",
         description:
-          "All Brazil-registered exchanges. Projection: id, name, website, cnpj, bcb_licensed, accepts_pix, monitored_by_dolarmap, updated_at.",
+          "All Brazil-registered exchanges. Projection: id, name, website, cnpj, bcb_authorized, accepts_pix, fiscal_details_br, updated_at.",
         example: "https://api.bitsark.com/v1/exchanges/brazil-registered",
+      },
+      {
+        method: "GET",
+        path: "/v1/exchanges/dolarmap",
+        description:
+          "[Internal] DolarMap-monitored exchanges. Requires X-Internal-Token header.",
+        example: "https://api.bitsark.com/v1/exchanges/dolarmap",
       },
       {
         method: "GET",
@@ -223,7 +242,8 @@ function handleIndex() {
 async function handleExchanges(params, env) {
   const data = await fetchExchanges(env);
   const filtered = applyFilters(data, params);
-  return successResponse(filtered, { count: filtered.length, total: data.length });
+  const publicData = filtered.map(toPublic);
+  return successResponse(publicData, { count: publicData.length, total: data.length });
 }
 
 async function handleFees(params, env) {
@@ -243,7 +263,7 @@ async function handleFees(params, env) {
 async function handleBrazilRegistered(env) {
   const data = await fetchExchanges(env);
   const filtered = data
-    .filter((e) => e.fiscal_details_br.tax_regime.startsWith("domestic_exchange"))
+    .filter((e) => e.fiscal_details_br?.tax_regime?.startsWith("domestic_exchange"))
     .map((e) => ({
       id: e.id,
       name: e.name,
@@ -252,21 +272,32 @@ async function handleBrazilRegistered(env) {
       bcb_authorized: e.operational_details_br.bcb_authorized,
       accepts_pix: e.operational_details_br.accepts_pix,
       fiscal_details_br: e.fiscal_details_br,
-      monitored_by_dolarmap: e.monitored_by_dolarmap,
       updated_at: e.updated_at,
     }));
   return successResponse(filtered, { count: filtered.length });
 }
 
+async function handleDolarmap(request, env) {
+  const token = request.headers.get("X-Internal-Token");
+
+  if (!env.DOLARMAP_SECRET || token !== env.DOLARMAP_SECRET) {
+    return errorResponse("Unauthorized. This endpoint requires a valid X-Internal-Token header.", 401);
+  }
+
+  const data = await fetchExchanges(env);
+  const filtered = data.filter((e) => e.monitored_by_dolarmap === true);
+  return successResponse(filtered, { count: filtered.length });
+}
+
 async function handleSingleExchange(idOrSlug, env) {
   const data = await fetchExchanges(env);
-  const exchange = data.find(
-    (e) => e.id === idOrSlug || e.slug === idOrSlug
-  );
+  const exchange = data.find((e) => e.id === idOrSlug || e.slug === idOrSlug);
+
   if (!exchange) {
     return errorResponse(`Exchange '${idOrSlug}' not found.`, 404);
   }
-  return successResponse(exchange);
+
+  return successResponse(toPublic(exchange));
 }
 
 // ---------------------------------------------------------------------------
@@ -327,6 +358,10 @@ export default {
         return await handleBrazilRegistered(env);
       }
 
+      if (path === "/v1/exchanges/dolarmap") {
+        return await handleDolarmap(request, env);
+      }
+
       // Dynamic route: /v1/exchanges/:id
       const singleMatch = path.match(/^\/v1\/exchanges\/([^/]+)$/);
       if (singleMatch) {
@@ -337,10 +372,7 @@ export default {
       return errorResponse("Not Found. See GET /v1 for available endpoints.", 404);
     } catch (err) {
       console.error("Worker error:", err);
-      return errorResponse(
-        "An internal error occurred. Please try again later.",
-        500
-      );
+      return errorResponse("An internal error occurred. Please try again later.", 500);
     }
   },
 };

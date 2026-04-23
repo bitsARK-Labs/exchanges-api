@@ -12,7 +12,7 @@ The BitsARK Exchanges API is a free, open-data REST API providing structured inf
 
 - **Base URL:** `https://api.bitsark.com/v1`
 - **Format:** JSON
-- **Auth:** None required
+- **Auth:** None required for public endpoints
 - **Rate limit:** 60 requests per minute per IP
 - **Cache:** Responses are cached at the Cloudflare edge for **1 hour**
 - **Source data:** [`data/exchanges.json`](../data/exchanges.json) in this repository
@@ -56,14 +56,14 @@ Returns the full list of all exchanges. Supports query string filters.
 # All exchanges
 curl https://api.bitsark.com/v1/exchanges
 
-# Only exchanges that accept Pix and support BRL
-curl "https://api.bitsark.com/v1/exchanges?accepts_pix=true&fiat=BRL"
+# Only exchanges that accept Pix
+curl "https://api.bitsark.com/v1/exchanges?accepts_pix=true"
 
-# BCB-licensed exchanges
+# BCB-authorized exchanges
 curl "https://api.bitsark.com/v1/exchanges?bcb_licensed=true"
 
-# Exchanges supporting USDT
-curl "https://api.bitsark.com/v1/exchanges?stablecoin=USDT"
+# By tax regime
+curl "https://api.bitsark.com/v1/exchanges?tax_regime=domestic_exchange"
 ```
 
 **Response (200)**
@@ -72,8 +72,8 @@ curl "https://api.bitsark.com/v1/exchanges?stablecoin=USDT"
 {
   "success": true,
   "notice": "...",
-  "count": 20,
-  "total": 20,
+  "count": 24,
+  "total": 24,
   "data": [
     {
       "id": "binance",
@@ -81,27 +81,31 @@ curl "https://api.bitsark.com/v1/exchanges?stablecoin=USDT"
       "slug": "binance",
       "website": "https://www.binance.com",
       "logo_url": "https://assets.bitsark.com/logos/binance.svg",
-      "brazil_registered": false,
-      "cnpj": null,
-      "bcb_licensed": false,
-      "accepts_pix": false,
+      "updated_at": "2026-04-22T21:56:00Z",
+      "operational_details_br": {
+        "cnpj": "45.165.233/0001-82",
+        "bcb_authorized": false,
+        "accepts_pix": true,
+        "main_jurisdiction_iso": "KY"
+      },
+      "fiscal_details_br": {
+        "tax_regime": "offshore_law_14754",
+        "monthly_brl_trade_exemption": 0,
+        "exchange_rfb_reports": ["decripto_annually"],
+        "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      },
       "fees": {
         "maker": 0.001,
         "taker": 0.001,
-        "fee_url": "https://www.binance.com/en/fee/schedule",
-        "withdrawal_usdt": 1.0,
-        "note": "VIP tiers reduce fees. BNB discount available (25% off)."
-      },
-      "supported_fiats": ["USD", "EUR", "BRL", "GBP", "AUD"],
-      "stablecoins": ["USDT", "USDC", "BUSD", "TUSD", "FDUSD"],
-      "kyc_required": true,
-      "monitored_by_dolarmap": true,
-      "cmc_rank": 1,
-      "updated_at": "2026-04-01T00:00:00Z"
+        "fee_url": "https://www.binance.com/pt-BR/fee/schedule",
+        "note": "25% discount when paying fees with BNB."
+      }
     }
   ]
 }
 ```
+
+> **Note:** The `monitored_by_dolarmap` field is an internal field and is **not returned** in public endpoints.
 
 ---
 
@@ -126,7 +130,7 @@ curl "https://api.bitsark.com/v1/exchanges/fees?brazil_registered=true"
   "success": true,
   "notice": "...",
   "count": 7,
-  "total": 20,
+  "total": 24,
   "data": [
     {
       "id": "foxbit",
@@ -136,11 +140,10 @@ curl "https://api.bitsark.com/v1/exchanges/fees?brazil_registered=true"
       "fees": {
         "maker": 0.003,
         "taker": 0.005,
-        "fee_url": "https://foxbit.com.br/taxas",
-        "withdrawal_usdt": 2.0,
-        "note": "Fees vary by trading volume. Pix deposits free."
+        "fee_url": "https://foxbit.com.br/taxas/",
+        "note": "Fees vary by trading volume. Pix deposits free; BRL withdrawals may incur a small fee."
       },
-      "updated_at": "2026-04-01T00:00:00Z"
+      "updated_at": "2026-04-22T21:56:00Z"
     }
   ]
 }
@@ -150,8 +153,7 @@ curl "https://api.bitsark.com/v1/exchanges/fees?brazil_registered=true"
 
 ### `GET /v1/exchanges/brazil-registered`
 
-Returns all exchanges where `brazil_registered: true`. The response uses a reduced projection:
-`id`, `name`, `website`, `cnpj`, `bcb_licensed`, `accepts_pix`, `monitored_by_dolarmap`, `updated_at`.
+Returns all exchanges with a Brazilian tax regime (`domestic_exchange` or `domestic_exchange_foreign_origin`). Response projection: `id`, `name`, `website`, `cnpj`, `bcb_authorized`, `accepts_pix`, `fiscal_details_br`, `updated_at`.
 
 **Request**
 
@@ -165,19 +167,65 @@ curl https://api.bitsark.com/v1/exchanges/brazil-registered
 {
   "success": true,
   "notice": "...",
-  "count": 7,
+  "count": 12,
   "data": [
     {
       "id": "foxbit",
       "name": "Foxbit",
       "website": "https://foxbit.com.br",
-      "cnpj": "18.139.993/0001-56",
-      "bcb_licensed": true,
+      "cnpj": "21.246.584/0002-30",
+      "bcb_authorized": true,
       "accepts_pix": true,
-      "monitored_by_dolarmap": true,
-      "updated_at": "2026-04-01T00:00:00Z"
+      "fiscal_details_br": {
+        "tax_regime": "domestic_exchange",
+        "monthly_brl_trade_exemption": 35000,
+        "exchange_rfb_reports": ["in_1888_monthly"],
+        "user_rfb_action_monthly": []
+      },
+      "updated_at": "2026-04-22T21:56:00Z"
     }
   ]
+}
+```
+
+---
+
+### `GET /v1/exchanges/dolarmap` *(Internal)*
+
+Returns only the exchanges monitored by the DolarMap service. This endpoint is **internal** and requires a valid `X-Internal-Token` header. Returns `401` if the token is missing or invalid.
+
+**Request**
+
+```bash
+curl https://api.bitsark.com/v1/exchanges/dolarmap \
+  -H "X-Internal-Token: YOUR_SECRET_TOKEN"
+```
+
+**Response (200)**
+
+```json
+{
+  "success": true,
+  "notice": "...",
+  "count": 13,
+  "data": [
+    {
+      "id": "binance",
+      "name": "Binance",
+      "monitored_by_dolarmap": true,
+      ...
+    }
+  ]
+}
+```
+
+**Response (401)**
+
+```json
+{
+  "success": false,
+  "notice": "...",
+  "error": "Unauthorized. This endpoint requires a valid X-Internal-Token header."
 }
 ```
 
@@ -232,21 +280,21 @@ curl https://api.bitsark.com/v1/exchanges/mercado-bitcoin
 | `slug` | `string` | URL-safe slug (matches `id`) |
 | `website` | `string` (URI) | Official website URL |
 | `logo_url` | `string` (URI) | Logo image URL |
-| `brazil_registered` | `boolean` | Registered as a legal entity in Brazil |
-| `cnpj` | `string` \| `null` | Brazilian CNPJ (`00.000.000/0000-00`) or `null` |
-| `bcb_licensed` | `boolean` | Holds a Banco Central do Brasil license |
-| `accepts_pix` | `boolean` | Supports Pix deposits/withdrawals |
+| `updated_at` | `string` (ISO 8601) | Date this entry was last manually verified |
+| `operational_details_br.cnpj` | `string` \| `null` | Brazilian CNPJ (`00.000.000/0000-00`) or `null` |
+| `operational_details_br.bcb_authorized` | `boolean` | Holds a Banco Central do Brasil authorization |
+| `operational_details_br.accepts_pix` | `boolean` | Supports Pix deposits/withdrawals |
+| `operational_details_br.main_jurisdiction_iso` | `string` | ISO country code of primary legal jurisdiction |
+| `fiscal_details_br.tax_regime` | `string` | Brazilian tax regime: `domestic_exchange`, `domestic_exchange_foreign_origin`, or `offshore_law_14754` |
+| `fiscal_details_br.monthly_brl_trade_exemption` | `number` | Monthly BRL trade volume exempt from reporting (0 if offshore) |
+| `fiscal_details_br.exchange_rfb_reports` | `string[]` | Reports the exchange files with Receita Federal |
+| `fiscal_details_br.user_rfb_action_monthly` | `string[]` | Monthly actions required from the user with Receita Federal |
 | `fees.maker` | `number` | Maker fee as decimal (e.g. `0.001` = 0.1%) |
 | `fees.taker` | `number` | Taker fee as decimal |
 | `fees.fee_url` | `string` (URI) | Official fee schedule page |
-| `fees.withdrawal_usdt` | `number` | USDT TRC-20 withdrawal fee in USDT |
 | `fees.note` | `string` | Human-readable fee notes / discounts |
-| `supported_fiats` | `string[]` | ISO 4217 fiat codes supported |
-| `stablecoins` | `string[]` | Stablecoin tickers supported |
-| `kyc_required` | `boolean` | KYC required to trade |
-| `monitored_by_dolarmap` | `boolean` | Monitored by the DolarMap service |
-| `cmc_rank` | `integer` \| `null` | CoinMarketCap exchange rank |
-| `updated_at` | `string` (ISO 8601) | Date this entry was last manually verified |
+
+> **Internal fields** (`monitored_by_dolarmap`) are stored in `data/exchanges.json` but are **never returned** by public endpoints. They are only accessible via `GET /v1/exchanges/dolarmap` with a valid `X-Internal-Token`.
 
 ---
 
@@ -257,16 +305,14 @@ Filters can be combined. All filter values are case-insensitive for booleans.
 | Parameter | Type | Applicable Endpoints | Description |
 | --- | --- | --- | --- |
 | `brazil_registered` | `true` / `false` | `/exchanges`, `/exchanges/fees` | Filter by Brazil registration |
-| `bcb_licensed` | `true` / `false` | `/exchanges`, `/exchanges/fees` | Filter by BCB license status |
+| `bcb_licensed` | `true` / `false` | `/exchanges`, `/exchanges/fees` | Filter by BCB authorization status |
 | `accepts_pix` | `true` / `false` | `/exchanges`, `/exchanges/fees` | Filter by Pix support |
-| `monitored_by_dolarmap` | `true` / `false` | `/exchanges`, `/exchanges/fees` | Filter by DolarMap monitoring |
-| `stablecoin` | `string` (e.g. `USDT`) | `/exchanges`, `/exchanges/fees` | Filter by supported stablecoin |
-| `fiat` | `string` (ISO 4217) | `/exchanges`, `/exchanges/fees` | Filter by supported fiat (e.g. `BRL`) |
+| `tax_regime` | `string` | `/exchanges`, `/exchanges/fees` | Filter by fiscal regime (`domestic_exchange`, `domestic_exchange_foreign_origin`, `offshore_law_14754`) |
 
-### Example: All Pix-enabled, BRL-supporting exchanges
+### Example: All Pix-enabled exchanges with domestic tax regime
 
 ```bash
-curl "https://api.bitsark.com/v1/exchanges?accepts_pix=true&fiat=BRL"
+curl "https://api.bitsark.com/v1/exchanges?accepts_pix=true&tax_regime=domestic_exchange"
 ```
 
 ---
@@ -274,7 +320,7 @@ curl "https://api.bitsark.com/v1/exchanges?accepts_pix=true&fiat=BRL"
 ## Rate Limiting
 
 - **Limit:** 60 requests per minute per IP address
-- **No API key required**
+- **No API key required** for public endpoints
 - When exceeded, the API returns `429 Too Many Requests` with a `Retry-After` header
 - Rate limit state is stored in Cloudflare KV (when configured)
 
@@ -304,6 +350,7 @@ All error responses follow this structure:
 | Status | Meaning |
 | --- | --- |
 | `400` | Bad request |
+| `401` | Unauthorized (missing or invalid `X-Internal-Token`) |
 | `404` | Exchange not found / endpoint not found |
 | `405` | Method not allowed (only GET and OPTIONS are supported) |
 | `429` | Rate limit exceeded |
@@ -314,12 +361,9 @@ All error responses follow this structure:
 ## CORS
 
 All responses include open CORS headers:
-
-```
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: GET, OPTIONS
-Access-Control-Allow-Headers: Content-Type
-```
+Access-Control-Allow-Headers: Content-Type, X-Internal-Token
 
 ---
 
