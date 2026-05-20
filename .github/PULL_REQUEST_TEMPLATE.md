@@ -8,6 +8,7 @@
 - [ ] 🏦 New exchange added
 - [ ] 🇧🇷 CNPJ correction / Brazil registration update
 - [ ] 📋 BCB license status change
+- [ ] ⚖️ Fiscal status / Tax regime update
 - [ ] 💱 Pix support change
 - [ ] 🔗 URL / website correction
 - [ ] 🪙 Stablecoin / fiat list update

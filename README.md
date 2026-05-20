@@ -71,10 +71,10 @@ Filters can be combined: `?accepts_pix=true&fiat=BRL&brazil_registered=true`
 
 - **Source file:** [`data/exchanges.json`](./data/exchanges.json)
 - **Schema:** [`schema/exchange.schema.json`](./schema/exchange.schema.json)
-- **Exchanges included:** 20 (Binance, OKX, Bybit, Bitget, KuCoin, MEXC, Foxbit, NovaDAX,
+- **Exchanges included:** 24 (Binance, OKX, Bybit, Bitget, KuCoin, MEXC, Foxbit, NovaDAX,
   Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BityPreço, Coinbase, Kraken, Gate.io,
-  HTX, Crypto.com, BingX, BitMart)
-- **Brazilian exchanges:** 7 (Foxbit, NovaDAX, Brasil Bitcoin, Coinext, Bitso, Mercado Bitcoin, BityPreço)
+  HTX, Crypto.com, BingX, BitMart, Nubank, Mercado Pago, Mynt, Bipa)
+- **Brazilian focus:** 12+ exchanges registered or with local operations in Brazil.
 
 Every entry is validated against the JSON Schema on every pull request.
 See [`docs/API.md`](./docs/API.md) for full field documentation.
@@ -106,7 +106,7 @@ All PRs must:
 
 | Project | Description |
 | --- | --- |
-| [DolarMap](https://dolarmap.bitsark.com) | Real-time USD/BRL rate monitoring across exchanges |
+| [DolarMap](https://bitsark.com/dolarmap/) | Real-time USD/BRL rate monitoring across exchanges |
 
 ---
 

@@ -8,7 +8,7 @@
 
 ## Overview
 
-The BitsARK Exchanges API is a free, open-data REST API providing structured information about cryptocurrency exchanges — including trading fees, Brazilian CNPJ registration status, Banco Central do Brasil (BCB) licensing, and Pix support.
+The BitsARK Exchanges API is a free, open-data REST API providing structured information about cryptocurrency exchanges — including trading fees, Brazilian CNPJ registration status, Banco Central do Brasil (BCB) licensing, Pix support, and most important: tax information about them.
 
 - **Base URL:** `https://api.bitsark.com/v1`
 - **Format:** JSON
@@ -64,6 +64,12 @@ curl "https://api.bitsark.com/v1/exchanges?bcb_licensed=true"
 
 # By tax regime
 curl "https://api.bitsark.com/v1/exchanges?tax_regime=domestic_exchange"
+
+# By fiscal status
+curl "https://api.bitsark.com/v1/exchanges?fiscal_status_br=Nacional"
+
+# Only monitored by DolarMap
+curl "https://api.bitsark.com/v1/exchanges?monitored_by_dolarmap=true"
 ```
 
 **Response (200)**
@@ -86,13 +92,13 @@ curl "https://api.bitsark.com/v1/exchanges?tax_regime=domestic_exchange"
         "cnpj": "45.165.233/0001-82",
         "bcb_authorized": false,
         "accepts_pix": true,
-        "main_jurisdiction_iso": "KY"
+        "main_jurisdiction_iso": "SC"
       },
       "fiscal_details_br": {
         "tax_regime": "offshore_law_14754",
         "monthly_brl_trade_exemption": 0,
         "exchange_rfb_reports": ["decripto_annually"],
-        "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+        "user_rfb_action_monthly": ["report_in1888_if_traded_over_30k", "pay_darf_if_profit"]
       },
       "fees": {
         "maker": 0.001,
@@ -167,7 +173,7 @@ curl https://api.bitsark.com/v1/exchanges/brazil-registered
 {
   "success": true,
   "notice": "...",
-  "count": 12,
+  "count": 16,
   "data": [
     {
       "id": "foxbit",

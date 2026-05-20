@@ -51,20 +51,12 @@
     "operational_details_br": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["cnpj", "bcb_authorized", "accepts_pix", "main_jurisdiction"],
+      "required": ["cnpj", "bcb_authorized", "accepts_pix", "main_jurisdiction_iso"],
       "properties": {
-        "cnpj": {
-          "oneOf": [
-            { "type": "string", "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$" },
-            { "type": "null" }
-          ]
-        },
+        "cnpj": { "oneOf": [{ "type": "string", "pattern": "^\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}$" }, { "type": "null" }] },
         "bcb_authorized": { "type": "boolean" },
         "accepts_pix": { "type": "boolean" },
-        "main_jurisdiction": {
-          "type": "string",
-          "enum": ["Brasil", "Offshore", "Internacional com Presença no Brasil"]
-        }
+        "main_jurisdiction_iso": { "type": "string", "pattern": "^[A-Z]{2}$" }
       }
     },
     "fiscal_details_br": {
@@ -96,7 +88,7 @@
         "user_rfb_action_monthly": {
           "type": "array",
           "items": {
-            "enum": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+            "enum": ["report_in1888_if_traded_over_30k", "pay_darf_if_profit"]
           }
         }
       }
@@ -112,18 +104,8 @@
         "note"
       ],
       "properties": {
-        "maker": {
-          "type": "number",
-          "description": "Maker fee as a decimal (e.g., 0.001 = 0.1%).",
-          "minimum": 0,
-          "maximum": 1
-        },
-        "taker": {
-          "type": "number",
-          "description": "Taker fee as a decimal (e.g., 0.001 = 0.1%).",
-          "minimum": 0,
-          "maximum": 1
-        },
+        "maker": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "taker": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
         "fee_url": {
           "type": "string",
           "description": "Direct URL to the exchange's official fee schedule page.",
@@ -139,15 +121,6 @@
     "monitored_by_dolarmap": {
       "type": "boolean",
       "description": "Whether this exchange is actively monitored by the DolarMap service."
-    },
-    "fiscal_status_br": {
-      "type": "string",
-      "description": "Classification of the exchange from a Brazilian fiscal perspective (Nacional, Internacional com Presença no Brasil, Internacional).",
-      "enum": [
-        "Nacional",
-        "Internacional com Presença no Brasil",
-        "Internacional"
-      ]
     },
     "updated_at": {
       "type": "string",

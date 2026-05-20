@@ -11,13 +11,18 @@
       "cnpj": "45.165.233/0001-82",
       "bcb_authorized": false,
       "accepts_pix": true,
-      "main_jurisdiction_iso": "KY"
+      "main_jurisdiction_iso": "SC"
     },
     "fiscal_details_br": {
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
-      "exchange_rfb_reports": ["decripto_annually"],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "exchange_rfb_reports": [
+        "decripto_annually"
+      ],
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -43,13 +48,15 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
-      "maker": 0.0008,
-      "taker": 0.001,
-      "fee_url": "https://www.okx.com/fees",
+      "maker": 0.001,
+      "taker": 0.004,
+      "fee_url": "https://www.okx.com/pt-br/fees",
       "note": "Tiered fee structure based on 30-day volume and OKB holdings."
     }
   },
@@ -70,7 +77,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -98,7 +107,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -125,7 +137,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -145,14 +160,17 @@
     "operational_details_br": {
       "cnpj": null,
       "bcb_authorized": false,
-      "accepts_pix": false,
+      "accepts_pix": true,
       "main_jurisdiction_iso": "SC"
     },
     "fiscal_details_br": {
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.0,
@@ -178,7 +196,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -205,7 +225,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -232,7 +254,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -259,7 +283,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -286,7 +312,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -313,7 +341,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -340,7 +370,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -367,7 +399,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -394,7 +428,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -422,7 +458,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -449,7 +488,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.002,
@@ -475,12 +517,14 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange_foreign_origin",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
-      "maker": 0.004,
-      "taker": 0.004,
+      "maker": 0.0025,
+      "taker": 0.005,
       "fee_url": "https://crypto.com/exchange/document/fees-limits",
       "note": "CRO staking reduces fees significantly. Exchange and App are separate platforms."
     }
@@ -503,7 +547,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -530,7 +577,10 @@
       "tax_regime": "offshore_law_14754",
       "monthly_brl_trade_exemption": 0,
       "exchange_rfb_reports": [],
-      "user_rfb_action_monthly": ["manual_report_over_30k_traded", "manual_darf_over_15k_profit"]
+      "user_rfb_action_monthly": [
+        "report_in1888_if_traded_over_30k",
+        "pay_darf_if_profit"
+      ]
     },
     "fees": {
       "maker": 0.001,
@@ -556,14 +606,16 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
       "maker": null,
       "taker": 0.006,
       "fee_url": "https://nubank.com.br/nu/nubank-criptomoeda",
-      "note": "; Spread embedded in execution price. Integrated into the Nubank app."
+      "note": "Spread embedded in execution price. Integrated into the Nubank app."
     }
   },
   {
@@ -583,7 +635,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
@@ -595,7 +649,7 @@
   },
   {
     "id": "mynt",
-    "name": "Mynt (BTG Pactual)",
+    "name": "Mynt BTG",
     "slug": "mynt",
     "website": "https://www.mynt.com.br",
     "logo_url": "https://assets.bitsark.com/logos/mynt.svg",
@@ -610,13 +664,15 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {
       "maker": null,
-      "taker": null,
-      "fee_url": "https://www.mynt.com.br",
+      "taker": 0.005,
+      "fee_url": "https://www.mynt.com.br/faq/",
       "note": "Spread embedded in quote; no explicit brokerage fee. Operated by BTG Pactual, BCB-authorized."
     }
   },
@@ -637,7 +693,9 @@
     "fiscal_details_br": {
       "tax_regime": "domestic_exchange",
       "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": ["in_1888_monthly"],
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
       "user_rfb_action_monthly": []
     },
     "fees": {

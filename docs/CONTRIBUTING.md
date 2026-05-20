@@ -60,6 +60,7 @@ PRs without verifiable sources will be closed without review.
    | `operational_details_br.accepts_pix` | `true` if the exchange supports Pix deposits/withdrawals in Brazil. |
    | `operational_details_br.main_jurisdiction_iso` | ISO 3166-1 alpha-2 code of the exchange's primary legal jurisdiction (e.g. `BR`, `KY`, `SC`). |
    | `fiscal_details_br.tax_regime` | One of: `domestic_exchange`, `domestic_exchange_foreign_origin`, `offshore_law_14754`. |
+   | `monitored_by_dolarmap` | Set to `false` for new community entries (manually reviewed by staff). |
    | `fiscal_details_br.monthly_brl_trade_exemption` | Monthly BRL volume below which the exchange is exempt from IN 1888 reporting. Use `0` for offshore. |
    | `fiscal_details_br.exchange_rfb_reports` | Array of report codes filed by the exchange with Receita Federal. Use `[]` if none. |
    | `fiscal_details_br.user_rfb_action_monthly` | Array of monthly actions the user must take with Receita Federal. Use `[]` if none. |
