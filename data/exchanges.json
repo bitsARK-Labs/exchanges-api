@@ -590,13 +590,13 @@
     }
   },
   {
-    "id": "nubank-cripto",
-    "name": "Nubank Cripto",
-    "slug": "nubank-cripto",
+    "id": "nubank",
+    "name": "Nubank",
+    "slug": "nubank",
     "website": "https://nubank.com.br/cripto",
     "logo_url": "https://assets.bitsark.com/logos/nubank.svg",
     "monitored_by_dolarmap": false,
-    "updated_at": "2026-04-22T21:56:00Z",
+    "updated_at": "2026-05-22T21:56:00Z",
     "operational_details_br": {
       "cnpj": "44.342.498/0001-46",
       "bcb_authorized": false,

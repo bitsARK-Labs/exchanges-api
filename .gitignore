@@ -22,5 +22,13 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Arquivos de trabalho temporários
+*.bak
+*-old.*
+*-claude.*
+scripts/_*
+*.log
+.claude/
+
 # VS code files
 .code-workspace
