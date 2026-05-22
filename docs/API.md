@@ -65,9 +65,6 @@ curl "https://api.bitsark.com/v1/exchanges?bcb_licensed=true"
 # By tax regime
 curl "https://api.bitsark.com/v1/exchanges?tax_regime=domestic_exchange"
 
-# By fiscal status
-curl "https://api.bitsark.com/v1/exchanges?fiscal_status_br=Nacional"
-
 # Only monitored by DolarMap
 curl "https://api.bitsark.com/v1/exchanges?monitored_by_dolarmap=true"
 ```
@@ -105,7 +102,8 @@ curl "https://api.bitsark.com/v1/exchanges?monitored_by_dolarmap=true"
         "taker": 0.001,
         "fee_url": "https://www.binance.com/pt-BR/fee/schedule",
         "note": "25% discount when paying fees with BNB."
-      }
+      },
+      "analysis_url": "https://bitsark.com/exchanges/binance/"
     }
   ]
 }
@@ -299,6 +297,7 @@ curl https://api.bitsark.com/v1/exchanges/mercado-bitcoin
 | `fees.taker` | `number` | Taker fee as decimal |
 | `fees.fee_url` | `string` (URI) | Official fee schedule page |
 | `fees.note` | `string` | Human-readable fee notes / discounts |
+| `analysis_url` | `string` (URI) | BitsARK analysis page for this exchange (e.g. `https://bitsark.com/exchanges/binance/`) |
 
 > **Internal fields** (`monitored_by_dolarmap`) are stored in `data/exchanges.json` but are **never returned** by public endpoints. They are only accessible via `GET /v1/exchanges/dolarmap` with a valid `X-Internal-Token`.
 

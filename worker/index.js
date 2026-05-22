@@ -146,21 +146,11 @@ function rateLimitHeaders(rl) {
 // ---------------------------------------------------------------------------
 // Field projection — strips internal fields from public responses
 // ---------------------------------------------------------------------------
-const FISCAL_STATUS_MAP = {
-  "domestic_exchange": "Nacional",
-  "domestic_exchange_foreign_origin": "Internacional com Presença no Brasil",
-  "offshore_law_14754": "Internacional"
-};
-
-function getFiscalStatus(regime) {
-  return FISCAL_STATUS_MAP[regime] || "Desconhecido";
-}
-
 function toPublic(exchange) {
   const { monitored_by_dolarmap, ...publicFields } = exchange;
   return {
     ...publicFields,
-    fiscal_status_br: getFiscalStatus(exchange.fiscal_details_br?.tax_regime)
+    analysis_url: `https://bitsark.com/exchanges/${exchange.slug}/`
   };
 }
 
@@ -198,14 +188,6 @@ function applyFilters(exchanges, params) {
     result = result.filter((e) => e.fiscal_details_br?.tax_regime === val);
   }
 
-  if (hasParam("fiscal_status_br")) {
-    const val = params.get("fiscal_status_br");
-    result = result.filter((e) => {
-      const currentStatus = getFiscalStatus(e.fiscal_details_br?.tax_regime);
-      return currentStatus === val;
-    });
-  }
-
   return result;
 }
 
@@ -237,7 +219,6 @@ async function handleIndex(env, rl) {
             "bcb_licensed (boolean)",
             "accepts_pix (boolean)",
             "monitored_by_dolarmap (boolean)",
-            "fiscal_status_br (string: Nacional | Internacional com Presença no Brasil | Internacional)",
             "tax_regime (string: domestic_exchange | domestic_exchange_foreign_origin | offshore_law_14754)",
           ],
           example: "https://api.bitsark.com/v1/exchanges?accepts_pix=true&brazil_registered=true",

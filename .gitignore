@@ -32,3 +32,7 @@ scripts/_*
 
 # VS code files
 .code-workspace
+
+# Documentação interna (não pública)
+ARCHITECTURE.md
+docs/ARCHITECTURE.md

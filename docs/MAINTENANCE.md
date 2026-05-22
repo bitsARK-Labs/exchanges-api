@@ -224,23 +224,31 @@ headers: { "X-Internal-Token": process.env.BITSARK_INTERNAL_TOKEN }
 
 ## 🔗 Integração com bitsark-web
 
-Ao final do `scrape-fees.yml`, um evento `repository_dispatch` é enviado para o
-repo [`bitsark-web`](https://github.com/bitsARK-Labs/bitsark-web) com o tipo
-`exchanges-data-updated`. Isso aciona um commit vazio no `main` do `bitsark-web`,
-que por sua vez acorda o **Cloudflare Pages** para um rebuild automático do site Astro.
-Durante o build, o site faz `fetch` na API e gera as páginas estáticas atualizadas.
+Quando `data/exchanges.json` é commitado na `main`, o workflow `notify-web.yml` é acionado
+automaticamente. Ele **envia um `repository_dispatch`** com `event_type: exchanges-data-updated`
+para o repo [`bitsark-web`](https://github.com/bitsARK-Labs/bitsark-web).
+
+O `rebuild-on-exchanges-update.yml` do `bitsark-web` então acorda, aguarda 5 segundos para o
+CDN do GitHub propagar o novo arquivo, faz `GET https://api.bitsark.com/v1/exchanges`, extrai
+o array `.data` do envelope, e commita `src/data/exchanges.json` se houve mudança — o que
+dispara o rebuild automático no Cloudflare Pages.
 
 ### Fluxo completo
 
 ```
-scrape-fees.yml (este repo) conclui com sucesso
-  └→ POST para github.com/repos/bitsARK-Labs/bitsark-web/dispatches
-       └→ deploy.yml do bitsark-web é acionado
-            └→ commit vazio no main do bitsark-web
-                 └→ Cloudflare Pages detecta → astro build → deploy ✓
+notify-web.yml (este repo) — dispara no push para main em data/exchanges.json
+  └→ POST repository_dispatch → bitsARK-Labs/bitsark-web
+          └→ rebuild-on-exchanges-update.yml do bitsark-web
+                1. sleep 5s (propagação do CDN do GitHub)
+                2. GET api.bitsark.com/v1/exchanges (Cache-Control: no-cache)
+                3. Extrai .data do envelope; valida que é array não-vazio
+                4. Compara com src/data/exchanges.json
+                   ├── Mudou → commit + push
+                   └── Sem mudança → commit vazio (cobre workflow_dispatch manual)
+                └→ Cloudflare Pages detecta push → astro build → deploy ✓
 ```
 
-### Secret necessário neste repo
+### Secrets necessários neste repo
 
 | Secret | Descrição |
 |---|---|
@@ -248,12 +256,12 @@ scrape-fees.yml (este repo) conclui com sucesso
 
 ### Se o token expirar
 
-Se o rebuild automático parar de funcionar após uma quarta-feira, verifique se o token
+Se o rebuild automático parar de funcionar, verifique se o `BITSARK_WEB_DEPLOY_TOKEN`
 expirou em **github.com → Settings → Developer settings → Fine-grained tokens**.
-Para recriar, siga as instruções em `bitsark-web/docs/WORKFLOWS.md`.
+Após recriar o PAT, atualize o secret em **este repo → Settings → Secrets → Actions**.
 
 > O deploy manual do `bitsark-web` continua funcionando normalmente mesmo se o token
-> expirar — apenas o trigger automático pára.
+> expirar — apenas o trigger automático para.
 
 ---
 
