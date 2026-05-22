@@ -82,6 +82,14 @@ async function checkRateLimit(ip, env) {
 }
 
 // ---------------------------------------------------------------------------
+// ETag generation (SHA-256 of response body)
+// ---------------------------------------------------------------------------
+async function generateETag(content) {
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(content));
+  return `"${Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, "0")).join("")}"`;
+}
+
+// ---------------------------------------------------------------------------
 // Data fetching — relies on GitHub's own CDN cache (~5 min TTL)
 // ---------------------------------------------------------------------------
 async function fetchExchanges() {
@@ -116,7 +124,7 @@ function successResponse(data, meta = {}, rlHeaders = {}) {
     },
     200,
     {
-      "Cache-Control": `public, max-age=${CLIENT_CACHE_TTL}, stale-while-revalidate=60`,
+      "Cache-Control": `public, max-age=${CLIENT_CACHE_TTL}, stale-while-revalidate=60, stale-if-error=86400`,
       ...rlHeaders,
     }
   );
@@ -189,6 +197,46 @@ function applyFilters(exchanges, params) {
   }
 
   return result;
+}
+
+// ---------------------------------------------------------------------------
+// Cache wrapper — Cloudflare edge cache (caches.default) + ETag/304 support
+// Only wraps public GET endpoints; authenticated/internal routes skip this.
+// ---------------------------------------------------------------------------
+async function withCache(request, ctx, handlerFn) {
+  const cache = caches.default;
+  const cacheKey = new Request(request.url, { method: "GET" });
+
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    const etag = cached.headers.get("ETag");
+    if (etag && request.headers.get("If-None-Match") === etag) {
+      return new Response(null, { status: 304, headers: { ETag: etag, ...CORS_HEADERS } });
+    }
+    const hit = new Response(cached.body, cached);
+    hit.headers.set("X-Cache", "HIT");
+    return hit;
+  }
+
+  const response = await handlerFn();
+
+  if (response.status === 200) {
+    const body = await response.text();
+    const etag = await generateETag(body);
+    const toStore = new Response(body, {
+      status: 200,
+      headers: {
+        ...Object.fromEntries(response.headers),
+        "ETag": etag,
+        "Cache-Control": `public, max-age=${CLIENT_CACHE_TTL}, stale-while-revalidate=60, stale-if-error=86400`,
+        "X-Cache": "MISS",
+      },
+    });
+    ctx.waitUntil(cache.put(cacheKey, toStore.clone()));
+    return toStore;
+  }
+
+  return response;
 }
 
 // ---------------------------------------------------------------------------
@@ -350,7 +398,7 @@ async function handleSingleExchange(idOrSlug, env, rl) {
 // Main entry point
 // ---------------------------------------------------------------------------
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const method = request.method.toUpperCase();
 
@@ -394,29 +442,30 @@ export default {
     try {
       // Route matching
       if (path === "/v1" || path === "/v1/") {
-        return await handleIndex(env, rl);
+        return withCache(request, ctx, () => handleIndex(env, rl));
       }
 
       if (path === "/v1/exchanges") {
-        return await handleExchanges(params, env, rl);
+        return withCache(request, ctx, () => handleExchanges(params, env, rl));
       }
 
       if (path === "/v1/exchanges/fees") {
-        return await handleFees(params, env, rl);
+        return withCache(request, ctx, () => handleFees(params, env, rl));
       }
 
       if (path === "/v1/exchanges/brazil-registered") {
-        return await handleBrazilRegistered(env, rl);
+        return withCache(request, ctx, () => handleBrazilRegistered(env, rl));
       }
 
       if (path === "/v1/exchanges/dolarmap") {
+        // Internal authenticated endpoint — not cached
         return await handleDolarmap(request, env, rl);
       }
 
       // Dynamic route: /v1/exchanges/:id
       const singleMatch = path.match(/^\/v1\/exchanges\/([^/]+)$/);
       if (singleMatch) {
-        return await handleSingleExchange(singleMatch[1], env, rl);
+        return withCache(request, ctx, () => handleSingleExchange(singleMatch[1], env, rl));
       }
 
       // No route matched
