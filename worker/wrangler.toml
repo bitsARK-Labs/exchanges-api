@@ -12,4 +12,4 @@ zone_name = "bitsark.com"
 
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = 85ac41cff4c14d5b9d2c13da2ae7f098
+id = "85ac41cff4c14d5b9d2c13da2ae7f098"
