@@ -17,7 +17,7 @@
 const DATA_URL =
   "https://raw.githubusercontent.com/bitsARK-Labs/exchanges-api/main/data/exchanges.json";
 
-const CACHE_TTL = 3600; // 1 hour in seconds
+const CACHE_TTL = 86400; // 24 hours in seconds
 
 const DISCLAIMER =
   "Data is provided for informational purposes only and may be outdated. " +
@@ -137,7 +137,10 @@ function successResponse(data, meta = {}, rlHeaders = {}) {
       data,
     },
     200,
-    rlHeaders
+    {
+      "Cache-Control": `public, max-age=${CACHE_TTL}, stale-while-revalidate=3600`,
+      ...rlHeaders,
+    }
   );
 }
 
@@ -231,7 +234,12 @@ function applyFilters(exchanges, params) {
 // ---------------------------------------------------------------------------
 // Route handlers
 // ---------------------------------------------------------------------------
-function handleIndex(rl) {
+async function handleIndex(env, rl) {
+  const data = await fetchExchanges(env);
+  const lastUpdated = data.reduce(
+    (max, e) => (e.updated_at > max ? e.updated_at : max),
+    ""
+  );
   return jsonResponse(
     {
       success: true,
@@ -240,6 +248,7 @@ function handleIndex(rl) {
       version: "v1",
       base_url: "https://api.bitsark.com/v1",
       documentation: "https://bitsark.com/exchanges/api",
+      data_last_updated: lastUpdated || null,
       endpoints: [
         {
           method: "GET",
@@ -283,7 +292,7 @@ function handleIndex(rl) {
           example: "https://api.bitsark.com/v1/exchanges/binance",
         },
       ],
-      cache: "Responses are cached at the edge for 1 hour.",
+      cache: "Responses are cached at the edge for 24 hours.",
       rate_limit: `${RATE_LIMIT_MAX} requests per minute per IP. No API key required.`,
     },
     200,
@@ -328,9 +337,9 @@ async function handleBrazilRegistered(env, rl) {
       id: e.id,
       name: e.name,
       website: e.website,
-      cnpj: e.operational_details_br.cnpj,
-      bcb_authorized: e.operational_details_br.bcb_authorized,
-      accepts_pix: e.operational_details_br.accepts_pix,
+      cnpj: e.operational_details_br?.cnpj,
+      bcb_authorized: e.operational_details_br?.bcb_authorized,
+      accepts_pix: e.operational_details_br?.accepts_pix,
       fiscal_details_br: e.fiscal_details_br,
       updated_at: e.updated_at,
     }));
@@ -426,7 +435,7 @@ export default {
     try {
       // Route matching
       if (path === "/v1" || path === "/v1/") {
-        return handleIndex(rl);
+        return await handleIndex(env, rl);
       }
 
       if (path === "/v1/exchanges") {

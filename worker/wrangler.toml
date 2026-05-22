@@ -10,10 +10,6 @@ enabled = true
 pattern = "api.bitsark.com/v1/*"
 zone_name = "bitsark.com"
 
-# To enable rate limiting, create a KV namespace in Cloudflare dashboard:
-# 1. Workers & Pages → KV → Create namespace → name: bitsark-rate-limit
-# 2. Copy the ID below and uncomment
-#
-# [[kv_namespaces]]
-# binding = "RATE_LIMIT_KV"
-# id = "YOUR_KV_NAMESPACE_ID"
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = 85ac41cff4c14d5b9d2c13da2ae7f098

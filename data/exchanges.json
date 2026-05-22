@@ -540,7 +540,7 @@
     "operational_details_br": {
       "cnpj": null,
       "bcb_authorized": false,
-      "accepts_pix": false,
+      "accepts_pix": true,
       "main_jurisdiction_iso": "SC"
     },
     "fiscal_details_br": {
