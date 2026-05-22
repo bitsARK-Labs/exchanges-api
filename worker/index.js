@@ -17,7 +17,7 @@
 const DATA_URL =
   "https://raw.githubusercontent.com/bitsARK-Labs/exchanges-api/main/data/exchanges.json";
 
-const CACHE_TTL = 86400; // 24 hours in seconds
+const CLIENT_CACHE_TTL = 300; // 5 minutes — matches GitHub CDN cache for raw files
 
 const DISCLAIMER =
   "Data is provided for informational purposes only and may be outdated. " +
@@ -82,36 +82,14 @@ async function checkRateLimit(ip, env) {
 }
 
 // ---------------------------------------------------------------------------
-// Data fetching with edge cache
+// Data fetching — relies on GitHub's own CDN cache (~5 min TTL)
 // ---------------------------------------------------------------------------
-async function fetchExchanges(env) {
-  const cacheKey = new Request(DATA_URL);
-  const cache = caches.default;
-
-  // Try cache first
-  let cached = await cache.match(cacheKey);
-  if (cached) {
-    return cached.json();
-  }
-
-  // Fetch from GitHub
+async function fetchExchanges() {
   const response = await fetch(DATA_URL);
   if (!response.ok) {
     throw new Error(`Upstream fetch failed: ${response.status}`);
   }
-
-  const data = await response.json();
-
-  // Store in edge cache
-  const toCache = new Response(JSON.stringify(data), {
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": `public, max-age=${CACHE_TTL}`,
-    },
-  });
-  await cache.put(cacheKey, toCache);
-
-  return data;
+  return response.json();
 }
 
 // ---------------------------------------------------------------------------
@@ -138,7 +116,7 @@ function successResponse(data, meta = {}, rlHeaders = {}) {
     },
     200,
     {
-      "Cache-Control": `public, max-age=${CACHE_TTL}, stale-while-revalidate=3600`,
+      "Cache-Control": `public, max-age=${CLIENT_CACHE_TTL}, stale-while-revalidate=60`,
       ...rlHeaders,
     }
   );
@@ -235,7 +213,7 @@ function applyFilters(exchanges, params) {
 // Route handlers
 // ---------------------------------------------------------------------------
 async function handleIndex(env, rl) {
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const lastUpdated = data.reduce(
     (max, e) => (e.updated_at > max ? e.updated_at : max),
     ""
@@ -292,7 +270,7 @@ async function handleIndex(env, rl) {
           example: "https://api.bitsark.com/v1/exchanges/binance",
         },
       ],
-      cache: "Responses are cached at the edge for 24 hours.",
+      cache: "Responses reflect GitHub data with up to 5 minutes of propagation delay.",
       rate_limit: `${RATE_LIMIT_MAX} requests per minute per IP. No API key required.`,
     },
     200,
@@ -301,7 +279,7 @@ async function handleIndex(env, rl) {
 }
 
 async function handleExchanges(params, env, rl) {
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const filtered = applyFilters(data, params);
   const publicData = filtered.map(toPublic);
   return successResponse(
@@ -312,7 +290,7 @@ async function handleExchanges(params, env, rl) {
 }
 
 async function handleFees(params, env, rl) {
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const filtered = applyFilters(data, params);
   const projection = filtered.map((e) => ({
     id: e.id,
@@ -330,7 +308,7 @@ async function handleFees(params, env, rl) {
 }
 
 async function handleBrazilRegistered(env, rl) {
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const filtered = data
     .filter((e) => e.fiscal_details_br?.tax_regime?.startsWith("domestic_exchange"))
     .map((e) => ({
@@ -363,7 +341,7 @@ async function handleDolarmap(request, env, rl) {
 
   // Internal endpoint — returns raw data including monitored_by_dolarmap.
   // toPublic() is intentionally NOT called here.
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const filtered = data.filter((e) => e.monitored_by_dolarmap === true);
   return successResponse(
     filtered,
@@ -373,7 +351,7 @@ async function handleDolarmap(request, env, rl) {
 }
 
 async function handleSingleExchange(idOrSlug, env, rl) {
-  const data = await fetchExchanges(env);
+  const data = await fetchExchanges();
   const exchange = data.find((e) => e.id === idOrSlug || e.slug === idOrSlug);
 
   if (!exchange) {

@@ -11,14 +11,6 @@ jobs:
     name: Trigger bitsark-web rebuild
     runs-on: ubuntu-latest
     steps:
-      - name: Purge Cloudflare edge cache
-        run: |
-          curl -s -X POST \
-            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            --data '{"files":["https://raw.githubusercontent.com/bitsARK-Labs/exchanges-api/main/data/exchanges.json"]}'
-
       - name: Dispatch rebuild event to bitsark-web
         run: |
           curl -s -X POST \
