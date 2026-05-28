@@ -30,6 +30,8 @@ curl https://api.bitsark.com/v1
 
 Full interactive documentation: **[bitsark.com/exchanges/api](https://bitsark.com/exchanges/api/)**
 
+OpenAPI spec: [`schema/openapi.yaml`](./schema/openapi.yaml) — import into Postman, Insomnia, or any OpenAPI-compatible tool. A pre-generated Postman collection is also available at [`schema/postman.collection.json`](./schema/postman.collection.json).
+
 ---
 
 ## Endpoints

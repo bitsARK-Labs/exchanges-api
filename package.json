@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "wrangler dev worker/index.js",
     "deploy": "wrangler deploy",
-    "validate": "node scripts/validate.js"
+    "validate": "node scripts/validate.js",
+    "lint:openapi": "spectral lint schema/openapi.yaml --fail-severity warn",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -15,8 +17,10 @@
   "author": "BitsARK Labs",
   "license": "MIT",
   "devDependencies": {
+    "@stoplight/spectral-cli": "^6.16.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "husky": "^9.1.7",
     "wrangler": "^4.84.1"
   }
 }

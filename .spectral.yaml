@@ -1,0 +1,12 @@
+extends:
+  - spectral:oas
+
+rules:
+  # Garante que toda operação tenha um operationId — crítico para geração de SDKs
+  operation-operationId: error
+
+  # Garante que toda operação tenha uma descrição
+  operation-description: warn
+
+  # Tags declaradas no root devem ser usadas nas operações
+  openapi-tags-alphabetical: off

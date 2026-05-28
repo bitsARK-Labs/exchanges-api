@@ -33,6 +33,9 @@ jobs:
       - name: Run schema validation
         run: node scripts/validate.js
 
+      - name: Lint OpenAPI spec
+        run: npm run lint:openapi
+
       # ── Soft warning: flag entries older than 180 days (does not fail the check) ──
       - name: Check for entries older than 180 days
         run: |
