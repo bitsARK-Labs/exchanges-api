@@ -468,6 +468,13 @@ export default {
         return withCache(request, ctx, () => handleSingleExchange(singleMatch[1], env, rl));
       }
 
+      if (path === "/robots.txt") {
+        return new Response("User-agent: *\nDisallow:\n", {
+          status: 200,
+          headers: { "Content-Type": "text/plain", "Cache-Control": "public, max-age=86400" },
+        });
+      }
+
       // No route matched
       return errorResponse(
         "Not Found. See GET /v1 for available endpoints.",
