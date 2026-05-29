@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 enabled = true
 
 [[routes]]
-pattern = "api.bitsark.com/v1/*"
+pattern = "api.bitsark.com/*"
 zone_name = "bitsark.com"
 
 [[kv_namespaces]]

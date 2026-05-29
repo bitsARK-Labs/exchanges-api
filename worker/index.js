@@ -441,7 +441,7 @@ export default {
 
     try {
       // Route matching
-      if (path === "/v1" || path === "/v1/") {
+      if (path === "" || path === "/" || path === "/v1" || path === "/v1/") {
         return withCache(request, ctx, () => handleIndex(env, rl));
       }
 
