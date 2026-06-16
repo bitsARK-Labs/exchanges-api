@@ -101,7 +101,10 @@ curl "https://api.bitsark.com/v1/exchanges?monitored_by_dolarmap=true"
         "maker": 0.001,
         "taker": 0.001,
         "fee_url": "https://www.binance.com/pt-BR/fee/schedule",
-        "note": "25% discount when paying fees with BNB."
+        "note": {
+          "en": "25% discount when paying fees with BNB.",
+          "pt": "25% de desconto ao pagar as taxas com BNB."
+        }
       },
       "analysis_url": "https://bitsark.com/exchanges/binance/"
     }
@@ -145,7 +148,10 @@ curl "https://api.bitsark.com/v1/exchanges/fees?brazil_registered=true"
         "maker": 0.003,
         "taker": 0.005,
         "fee_url": "https://foxbit.com.br/taxas/",
-        "note": "Fees vary by trading volume. Pix deposits free; BRL withdrawals may incur a small fee."
+        "note": {
+          "en": "Fees vary by trading volume. Pix deposits free; BRL withdrawals may incur a small fee.",
+          "pt": "As taxas variam conforme o volume negociado. Depósitos via Pix são gratuitos; saques em BRL podem ter uma pequena taxa."
+        }
       },
       "updated_at": "2026-04-22T21:56:00Z"
     }
@@ -296,7 +302,7 @@ curl https://api.bitsark.com/v1/exchanges/mercado-bitcoin
 | `fees.maker` | `number` | Maker fee as decimal (e.g. `0.001` = 0.1%) |
 | `fees.taker` | `number` | Taker fee as decimal |
 | `fees.fee_url` | `string` (URI) | Official fee schedule page |
-| `fees.note` | `string` | Human-readable fee notes / discounts |
+| `fees.note` | `object` | Localized fee notes / discounts: `{ "en": string, "pt": string }` |
 | `analysis_url` | `string` (URI) | BitsARK analysis page for this exchange (e.g. `https://bitsark.com/exchanges/binance/`) |
 
 > **Internal fields** (`monitored_by_dolarmap`) are stored in `data/exchanges.json` but are **never returned** by public endpoints. They are only accessible via `GET /v1/exchanges/dolarmap` with a valid `X-Internal-Token`.

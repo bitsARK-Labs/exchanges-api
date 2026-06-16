@@ -474,6 +474,22 @@ components:
               - pay_darf_if_profit
           example: ["report_in1888_if_traded_over_30k", "pay_darf_if_profit"]
 
+    LocalizedNote:
+      type: object
+      description: Observações sobre descontos, tiers ou condições especiais, localizadas por idioma
+      required: [en, pt]
+      properties:
+        en:
+          type: string
+          description: Texto em inglês
+          maxLength: 512
+          example: "25% discount when paying fees with BNB."
+        pt:
+          type: string
+          description: Texto em português do Brasil
+          maxLength: 512
+          example: "25% de desconto ao pagar as taxas com BNB."
+
     ExchangeFees:
       type: object
       required: [maker, taker, fee_url, note]
@@ -496,9 +512,7 @@ components:
           description: URL oficial com a tabela de tarifas da corretora
           example: https://www.binance.com/pt-BR/fee/schedule
         note:
-          type: string
-          description: Observações sobre descontos, tiers ou condições especiais
-          example: "25% discount when paying fees with BNB."
+          $ref: '#/components/schemas/LocalizedNote'
 
     Exchange:
       type: object
@@ -685,5 +699,7 @@ components:
               maker: 0.001
               taker: 0.001
               fee_url: https://www.binance.com/pt-BR/fee/schedule
-              note: "25% discount when paying fees with BNB."
+              note:
+                en: "25% discount when paying fees with BNB."
+                pt: "25% de desconto ao pagar as taxas com BNB."
             updated_at: "2026-04-22T21:56:00Z"

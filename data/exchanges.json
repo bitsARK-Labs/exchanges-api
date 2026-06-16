@@ -28,7 +28,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.binance.com/pt-BR/fee/schedule",
-      "note": "25% discount when paying fees with BNB."
+      "note": {
+        "en": "25% discount when paying fees with BNB.",
+        "pt": "25% de desconto ao pagar as taxas com BNB."
+      }
     }
   },
   {
@@ -57,7 +60,10 @@
       "maker": 0.001,
       "taker": 0.004,
       "fee_url": "https://www.okx.com/pt-br/fees",
-      "note": "Tiered fee structure based on 30-day volume and OKB holdings."
+      "note": {
+        "en": "Tiered fee structure based on 30-day volume and OKB holdings.",
+        "pt": "Estrutura de taxas escalonada conforme o volume de 30 dias e a quantidade de OKB."
+      }
     }
   },
   {
@@ -86,7 +92,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
-      "note": "Spot maker/taker 0.1%. Futures fees differ."
+      "note": {
+        "en": "Spot maker/taker 0.1%. Futures fees differ.",
+        "pt": "Maker/taker spot de 0,1%. As taxas de futuros são diferentes."
+      }
     }
   },
   {
@@ -116,7 +125,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bitget.com/en/rate/fee",
-      "note": "BGB token holders receive fee discounts."
+      "note": {
+        "en": "BGB token holders receive fee discounts.",
+        "pt": "Detentores do token BGB recebem descontos nas taxas."
+      }
     }
   },
   {
@@ -146,7 +158,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.kucoin.com/announcement/en-fee",
-      "note": "KCS holders receive up to 20% fee discount."
+      "note": {
+        "en": "KCS holders receive up to 20% fee discount.",
+        "pt": "Detentores de KCS recebem até 20% de desconto nas taxas."
+      }
     }
   },
   {
@@ -176,7 +191,10 @@
       "maker": 0.0,
       "taker": 0.0,
       "fee_url": "https://www.mexc.com/fee",
-      "note": "Spot maker/taker currently 0%. Futures fees apply separately."
+      "note": {
+        "en": "Spot maker/taker currently 0%. Futures fees apply separately.",
+        "pt": "Maker/taker spot atualmente em 0%. As taxas de futuros são cobradas à parte."
+      }
     }
   },
   {
@@ -205,7 +223,10 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://foxbit.com.br/taxas/",
-      "note": "Fees vary by trading volume. Pix deposits free; BRL withdrawals may incur a small fee."
+      "note": {
+        "en": "Fees vary by trading volume. Pix deposits free; BRL withdrawals may incur a small fee.",
+        "pt": "As taxas variam conforme o volume negociado. Depósitos via Pix são gratuitos; saques em BRL podem ter uma pequena taxa."
+      }
     }
   },
   {
@@ -234,7 +255,10 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://www.novadax.com.br/taxas-e-limites",
-      "note": "ONG token holders receive fee discounts. Pix available for BRL operations."
+      "note": {
+        "en": "ONG token holders receive fee discounts. Pix available for BRL operations.",
+        "pt": "Detentores do token ONG recebem descontos nas taxas. Pix disponível para operações em BRL."
+      }
     }
   },
   {
@@ -263,7 +287,10 @@
       "maker": 0.005,
       "taker": 0.005,
       "fee_url": "https://brasilbitcoin.com.br/taxas",
-      "note": "Flat 0.5% trading fee. Pix available for BRL deposits and withdrawals."
+      "note": {
+        "en": "Flat 0.5% trading fee. Pix available for BRL deposits and withdrawals.",
+        "pt": "Taxa de negociação fixa de 0,5%. Pix disponível para depósitos e saques em BRL."
+      }
     }
   },
   {
@@ -292,7 +319,10 @@
       "maker": 0.0025,
       "taker": 0.005,
       "fee_url": "https://coinext.com.br/taxas-limites-prazos",
-      "note": "Pix available for BRL deposits and withdrawals."
+      "note": {
+        "en": "Pix available for BRL deposits and withdrawals.",
+        "pt": "Pix disponível para depósitos e saques em BRL."
+      }
     }
   },
   {
@@ -321,7 +351,10 @@
       "maker": 0.005,
       "taker": 0.005,
       "fee_url": "https://bitso.com/fees",
-      "note": "Tiered maker/taker based on 30-day volume. Pix available in Brazil."
+      "note": {
+        "en": "Tiered maker/taker based on 30-day volume. Pix available in Brazil.",
+        "pt": "Maker/taker escalonado conforme o volume de 30 dias. Pix disponível no Brasil."
+      }
     }
   },
   {
@@ -350,7 +383,10 @@
       "maker": 0.003,
       "taker": 0.007,
       "fee_url": "https://www.mercadobitcoin.com.br/taxas-contas-limites",
-      "note": "Largest Brazilian exchange by volume. Pix fully supported. Volume-based tiers."
+      "note": {
+        "en": "Largest Brazilian exchange by volume. Pix fully supported. Volume-based tiers.",
+        "pt": "Maior exchange brasileira por volume. Pix totalmente suportado. Tiers baseados em volume."
+      }
     }
   },
   {
@@ -379,7 +415,10 @@
       "maker": 0.003,
       "taker": 0.005,
       "fee_url": "https://suporte.bity.com.br/pt-BR/articles/6967815-taxas",
-      "note": "Brazilian retail-focused exchange. Pix available for BRL."
+      "note": {
+        "en": "Brazilian retail-focused exchange. Pix available for BRL.",
+        "pt": "Exchange brasileira focada no varejo. Pix disponível para BRL."
+      }
     }
   },
   {
@@ -408,7 +447,10 @@
       "maker": 0.004,
       "taker": 0.006,
       "fee_url": "https://help.coinbase.com/en/exchange/trading-and-funding/exchange-fees",
-      "note": "Advanced Trade fees. Simple Buy/Sell fees are higher."
+      "note": {
+        "en": "Advanced Trade fees. Simple Buy/Sell fees are higher.",
+        "pt": "Taxas do Advanced Trade. As taxas de compra/venda simples são mais altas."
+      }
     }
   },
   {
@@ -437,7 +479,10 @@
       "maker": 0.0016,
       "taker": 0.0026,
       "fee_url": "https://www.kraken.com/features/fee-schedule",
-      "note": "Tiered maker/taker. Pro fees lower than retail."
+      "note": {
+        "en": "Tiered maker/taker. Pro fees lower than retail.",
+        "pt": "Maker/taker escalonado. As taxas do Pro são menores que as do varejo."
+      }
     }
   },
   {
@@ -467,7 +512,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.gate.com/fee",
-      "note": "GT token holders receive fee discounts."
+      "note": {
+        "en": "GT token holders receive fee discounts.",
+        "pt": "Detentores do token GT recebem descontos nas taxas."
+      }
     }
   },
   {
@@ -497,7 +545,10 @@
       "maker": 0.002,
       "taker": 0.002,
       "fee_url": "https://www.htx.com/fee/",
-      "note": "Formerly Huobi. HT token holders receive discounts."
+      "note": {
+        "en": "Formerly Huobi. HT token holders receive discounts.",
+        "pt": "Antiga Huobi. Detentores do token HT recebem descontos."
+      }
     }
   },
   {
@@ -526,7 +577,10 @@
       "maker": 0.0025,
       "taker": 0.005,
       "fee_url": "https://crypto.com/exchange/document/fees-limits",
-      "note": "CRO staking reduces fees significantly. Exchange and App are separate platforms."
+      "note": {
+        "en": "CRO staking reduces fees significantly. Exchange and App are separate platforms.",
+        "pt": "O staking de CRO reduz as taxas significativamente. Exchange e App são plataformas separadas."
+      }
     }
   },
   {
@@ -556,7 +610,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bingx.com/en/support/articles/360027240173",
-      "note": "Copy trading fees may differ from standard spot fees."
+      "note": {
+        "en": "Copy trading fees may differ from standard spot fees.",
+        "pt": "As taxas de copy trading podem diferir das taxas spot padrão."
+      }
     }
   },
   {
@@ -586,94 +643,10 @@
       "maker": 0.001,
       "taker": 0.001,
       "fee_url": "https://www.bitmart.com/fee/en",
-      "note": "BMX token holders receive fee discounts."
-    }
-  },
-  {
-    "id": "nubank",
-    "name": "Nubank",
-    "slug": "nubank",
-    "website": "https://nubank.com.br/cripto",
-    "logo_url": "https://assets.bitsark.com/logos/nubank.svg",
-    "monitored_by_dolarmap": false,
-    "updated_at": "2026-05-22T21:56:00Z",
-    "operational_details_br": {
-      "cnpj": "44.342.498/0001-46",
-      "bcb_authorized": false,
-      "accepts_pix": true,
-      "main_jurisdiction_iso": "BR"
-    },
-    "fiscal_details_br": {
-      "tax_regime": "domestic_exchange",
-      "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": [
-        "in_1888_monthly"
-      ],
-      "user_rfb_action_monthly": []
-    },
-    "fees": {
-      "maker": null,
-      "taker": 0.006,
-      "fee_url": "https://nubank.com.br/nu/nubank-criptomoeda",
-      "note": "Spread embedded in execution price. Integrated into the Nubank app."
-    }
-  },
-  {
-    "id": "mercado-pago",
-    "name": "Mercado Pago",
-    "slug": "mercado-pago",
-    "website": "https://www.mercadopago.com.br/cripto",
-    "logo_url": "https://assets.bitsark.com/logos/mercado-pago.svg",
-    "monitored_by_dolarmap": false,
-    "updated_at": "2026-04-22T21:56:00Z",
-    "operational_details_br": {
-      "cnpj": "10.573.521/0001-91",
-      "bcb_authorized": true,
-      "accepts_pix": true,
-      "main_jurisdiction_iso": "BR"
-    },
-    "fiscal_details_br": {
-      "tax_regime": "domestic_exchange",
-      "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": [
-        "in_1888_monthly"
-      ],
-      "user_rfb_action_monthly": []
-    },
-    "fees": {
-      "maker": null,
-      "taker": 0.015,
-      "fee_url": "https://www.mercadopago.com.br/cripto",
-      "note": "Spread embedded in quote. Integrated into Mercado Pago account."
-    }
-  },
-  {
-    "id": "mynt",
-    "name": "Mynt BTG",
-    "slug": "mynt",
-    "website": "https://www.mynt.com.br",
-    "logo_url": "https://assets.bitsark.com/logos/mynt.svg",
-    "monitored_by_dolarmap": false,
-    "updated_at": "2026-04-22T21:56:00Z",
-    "operational_details_br": {
-      "cnpj": "44.364.466/0001-41",
-      "bcb_authorized": true,
-      "accepts_pix": true,
-      "main_jurisdiction_iso": "BR"
-    },
-    "fiscal_details_br": {
-      "tax_regime": "domestic_exchange",
-      "monthly_brl_trade_exemption": 35000,
-      "exchange_rfb_reports": [
-        "in_1888_monthly"
-      ],
-      "user_rfb_action_monthly": []
-    },
-    "fees": {
-      "maker": null,
-      "taker": 0.005,
-      "fee_url": "https://www.mynt.com.br/faq/",
-      "note": "Spread embedded in quote; no explicit brokerage fee. Operated by BTG Pactual, BCB-authorized."
+      "note": {
+        "en": "BMX token holders receive fee discounts.",
+        "pt": "Detentores do token BMX recebem descontos nas taxas."
+      }
     }
   },
   {
@@ -702,7 +675,106 @@
       "maker": null,
       "taker": 0.02,
       "fee_url": "https://suporte.bipa.app/hc/pt-br/articles/30249970786587-Quais-sao-as-taxas-de-negociacao-de-Bitcoin-e-USDT-na-Bipa",
-      "note": "Zero fee on recurring purchases. Spread embedded on operations. BTC cashback card available."
+      "note": {
+        "en": "Zero fee on recurring purchases. Spread embedded on operations. BTC cashback card available.",
+        "pt": "Sem taxa em compras recorrentes. Spread embutido nas operações. Cartão com cashback em BTC disponível."
+      }
+    }
+  },
+  {
+    "id": "nubank",
+    "name": "Nubank",
+    "slug": "nubank",
+    "website": "https://nubank.com.br/",
+    "logo_url": "https://assets.bitsark.com/logos/nubank.svg",
+    "monitored_by_dolarmap": false,
+    "updated_at": "2026-05-22T21:56:00Z",
+    "operational_details_br": {
+      "cnpj": "44.342.498/0001-46",
+      "bcb_authorized": false,
+      "accepts_pix": true,
+      "main_jurisdiction_iso": "BR"
+    },
+    "fiscal_details_br": {
+      "tax_regime": "domestic_exchange",
+      "monthly_brl_trade_exemption": 35000,
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
+      "user_rfb_action_monthly": []
+    },
+    "fees": {
+      "maker": null,
+      "taker": 0.006,
+      "fee_url": "https://nubank.com.br/nu/nubank-criptomoeda",
+      "note": {
+        "en": "Spread embedded in execution price. Integrated into the Nubank app.",
+        "pt": "Spread embutido no preço de execução. Integrado ao app do Nubank."
+      }
+    }
+  },
+  {
+    "id": "mercado-pago",
+    "name": "Mercado Pago",
+    "slug": "mercado-pago",
+    "website": "https://www.mercadopago.com.br/cripto",
+    "logo_url": "https://assets.bitsark.com/logos/mercado-pago.svg",
+    "monitored_by_dolarmap": false,
+    "updated_at": "2026-04-22T21:56:00Z",
+    "operational_details_br": {
+      "cnpj": "10.573.521/0001-91",
+      "bcb_authorized": true,
+      "accepts_pix": true,
+      "main_jurisdiction_iso": "BR"
+    },
+    "fiscal_details_br": {
+      "tax_regime": "domestic_exchange",
+      "monthly_brl_trade_exemption": 35000,
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
+      "user_rfb_action_monthly": []
+    },
+    "fees": {
+      "maker": null,
+      "taker": 0.015,
+      "fee_url": "https://www.mercadopago.com.br/cripto",
+      "note": {
+        "en": "Spread embedded in quote. Integrated into Mercado Pago account.",
+        "pt": "Spread embutido na cotação. Integrado à conta do Mercado Pago."
+      }
+    }
+  },
+  {
+    "id": "mynt",
+    "name": "Mynt BTG",
+    "slug": "mynt",
+    "website": "https://www.mynt.com.br",
+    "logo_url": "https://assets.bitsark.com/logos/mynt.svg",
+    "monitored_by_dolarmap": false,
+    "updated_at": "2026-04-22T21:56:00Z",
+    "operational_details_br": {
+      "cnpj": "44.364.466/0001-41",
+      "bcb_authorized": true,
+      "accepts_pix": true,
+      "main_jurisdiction_iso": "BR"
+    },
+    "fiscal_details_br": {
+      "tax_regime": "domestic_exchange",
+      "monthly_brl_trade_exemption": 35000,
+      "exchange_rfb_reports": [
+        "in_1888_monthly"
+      ],
+      "user_rfb_action_monthly": []
+    },
+    "fees": {
+      "maker": null,
+      "taker": 0.005,
+      "fee_url": "https://www.mynt.com.br/faq/",
+      "note": {
+        "en": "Spread embedded in quote; no explicit brokerage fee. Operated by BTG Pactual, BCB-authorized.",
+        "pt": "Spread embutido na cotação; sem taxa de corretagem explícita. Operada pelo BTG Pactual, autorizada pelo BCB."
+      }
     }
   }
 ]

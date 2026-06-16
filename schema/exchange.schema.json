@@ -112,9 +112,22 @@
           "format": "uri"
         },
         "note": {
-          "type": "string",
-          "description": "Human-readable note about fees, discounts, or special conditions.",
-          "maxLength": 512
+          "type": "object",
+          "description": "Human-readable note about fees, discounts, or special conditions, localized per language.",
+          "additionalProperties": false,
+          "required": ["en", "pt"],
+          "properties": {
+            "en": {
+              "type": "string",
+              "description": "English note.",
+              "maxLength": 512
+            },
+            "pt": {
+              "type": "string",
+              "description": "Brazilian Portuguese note.",
+              "maxLength": 512
+            }
+          }
         }
       }
     },

@@ -14,7 +14,7 @@ Para cada corretora, o ChatGPT deve buscar e retornar **somente estes campos**:
 |---|---|---|
 | `fees.maker` | Taxa maker em decimal (tier padrão iniciante) | `0.001` = 0,1% |
 | `fees.taker` | Taxa taker em decimal (tier padrão iniciante) | `0.001` = 0,1% |
-| `fees.note` | Observação sobre descontos ou condições | `"BNB discount available (25% off)."` |
+| `fees.note` | Observação sobre descontos ou condições, localizada `{ en, pt }` | `{ "en": "BNB discount available (25% off).", "pt": "Desconto de 25% ao pagar com BNB." }` |
 | `fees.fee_url` | URL oficial da página de taxas | `"https://binance.com/en/fee/schedule"` |
 
 > ⚠️ **Não pedir** ao ChatGPT: `operational_details_br`, `fiscal_details_br`, `monitored_by_dolarmap`. Estes campos são gerenciados internamente e nunca devem ser alterados via manutenção mensal.
@@ -34,7 +34,7 @@ Abra o ChatGPT (com navegação web ativada) e cole o prompt abaixo **exatamente
 1. FONTE PRIMÁRIA APENAS: Você deve buscar informações APENAS nos domínios oficiais das corretoras listadas (ex: binance.com, coinbase.com). 
 2. PROIBIÇÃO DE BLOGS/NOTÍCIAS: Ignore completamente informações de blogs, fóruns (Reddit), sites de notícias ou agregadores (CoinMarketCap, Coingecko).
 3. POLÍTICA DE "NÃO TENHO CERTEZA": Se você não encontrar a informação explicitamente na página de taxas (fee_url) ou no suporte oficial da corretora, retorne o valor atual como "KEEP_CURRENT" ou null. Não tente adivinhar ou usar dados históricos.
-4. DATA DE VERIFICAÇÃO: Se a informação no site tiver uma data (ex: "Last updated: Oct 2023"), reporte isso no campo "note".
+4. DATA DE VERIFICAÇÃO: Se a informação no site tiver uma data (ex: "Last updated: Oct 2023"), reporte isso no campo "note" (em ambos os idiomas, en e pt).
 5. DETALHES OPERACIONAIS/FISCAIS: Os campos `operational_details_br` e `fiscal_details_br` são internos. **NUNCA** modifique estes objetos.
 
 ***
@@ -45,7 +45,7 @@ Preciso que você acesse a página oficial de taxas de cada corretora abaixo e m
 Para cada corretora, acesse a URL indicada e extraia:
 - maker: taxa maker em decimal (ex: 0.1% = 0.001)
 - taker: taxa taker em decimal
-- note: uma frase curta em inglês sobre descontos ou condições especiais (máx 100 caracteres)
+- note: objeto com uma frase curta sobre descontos ou condições especiais (máx 100 caracteres) em DOIS idiomas — `en` (inglês) e `pt` (português do Brasil), com o mesmo significado nos dois
 - fee_url: a URL exata que você acessou
 
 REGRA FUNDAMENTAL — Tier padrão iniciante:
@@ -64,7 +64,10 @@ Retorne um array JSON com este formato exato, sem nenhum texto antes ou depois:
     "fees": {
       "maker": 0.001,
       "taker": 0.001,
-      "note": "Standard tier. Verified on official fee schedule.",
+      "note": {
+        "en": "Standard tier. Verified on official fee schedule.",
+        "pt": "Tier padrão. Verificado na tabela oficial de taxas."
+      },
       "fee_url": "https://www.binance.com/en/fee/schedule"
     }
   }
@@ -100,8 +103,8 @@ Corretoras para verificar:
 Importante:
 - Use sempre decimal, não percentual (0.001, não 0.1 nem "0.1%")
 - Se maker e taker forem iguais, repita o valor nos dois campos
-- Para corretoras que não têm maker/taker explícito (ex: spread embutido), use null para maker/taker e descreva no note
-- Se a informação não estiver clara no site oficial ou for de fonte secundária, retorne null para os valores e note: "OFFICIAL_SOURCE_NOT_FOUND"
+- Para corretoras que não têm maker/taker explícito (ex: spread embutido), use null para maker/taker e descreva no note (en e pt)
+- Se a informação não estiver clara no site oficial ou for de fonte secundária, retorne null para os valores e note: { "en": "OFFICIAL_SOURCE_NOT_FOUND", "pt": "OFFICIAL_SOURCE_NOT_FOUND" }
 - Retorne SOMENTE o array JSON, sem texto adicional
 ```
 

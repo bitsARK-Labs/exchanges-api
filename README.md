@@ -75,7 +75,7 @@ Every response follows the same structure:
       "slug": "mercado-bitcoin",
       "name": "Mercado Bitcoin",
       "website": "https://www.mercadobitcoin.com.br",
-      "fees": { "maker": 0.003, "taker": 0.003, "note": "Standard tier." },
+      "fees": { "maker": 0.003, "taker": 0.003, "note": { "en": "Standard tier.", "pt": "Tier padrão." } },
       "analysis_url": "https://bitsark.com/exchanges/mercado-bitcoin/",
       "updated_at": "2026-05-01T00:00:00Z"
     }
